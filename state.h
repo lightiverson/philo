@@ -8,7 +8,7 @@
 #include "timestamp.h"
 
 void eat(size_t i);
-void sleep(size_t i);
+void philo_sleep(size_t i);
 void has_died(size_t i);
 void think(size_t i);
 

@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/15 16:58:32 by kgajadie      ########   odam.nl         */
+/*   Updated: 2022/12/16 11:34:31 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,23 @@ enum e_state {
 	SLEEPING = 3,
 };
 
-typedef struct s_philosopher
+typedef struct s_philo
 {
-	size_t	time_to_die;
-	size_t	time_to_eat;
-	size_t	time_to_sleep;
-	size_t	number_of_times_to_eat;
-	size_t	number;
-	int		state;
-}	t_philosopher;
+	int	n_of_philos;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	number_of_times_to_eat;
+	int	state;
+}	t_philo;
+
+typedef struct s_args
+{
+	int	n_of_philos;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	number_of_times_to_eat;
+}	t_args;
 
 #endif
