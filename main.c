@@ -37,28 +37,30 @@ void	print_args_struct(t_args *args)
 	printf("}\n");
 }
 
-// nu wil ik een array maken van philo instances (structs)
-// array is n_of_philos groot
-// hoe maak je een philo instance aan? -> 
-// declare -> malloc -> laat pointer ernaar wijzen
-t_philo	*init_philos(t_args args)
+void	print_philo_struct(t_philo *philo)
+{
+	printf("t_philo philo\n");
+	printf("{\n");
+	printf("\tstate = %d\n", philo->state);
+	printf("\tis_alive = %d\n", philo->is_alive);
+	printf("\t*args = %p\n", philo->args);
+	printf("}\n");
+}
+
+t_philo	*init_philos(t_args *args)
 {
 	int		i;
 	t_philo	*philos;
 
-	philos = malloc(sizeof(*philos) * args.n_of_philos);
+	philos = malloc(sizeof(*philos) * args->n_of_philos);
 	if (!philos)
 		return (0);
 	i = 0;
-	while (i < args.n_of_philos)
+	while (i < args->n_of_philos)
 	{
-		philos[i].n_of_philos = args.n_of_philos;
-		philos[i].time_to_die = args.time_to_die;
-		philos[i].time_to_eat = args.time_to_eat;
-		philos[i].time_to_sleep = args.time_to_sleep;
-		philos[i].number_of_times_to_eat = args.number_of_times_to_eat;
 		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
 		philos[i].is_alive = true;
+		philos[i].args = args;
 		i++;
 	}
 	return (philos);
@@ -82,7 +84,10 @@ int main (int argc, const char *argv[5])
 		return (EXIT_FAILURE);
 	}
 	print_args_struct(&args);
-	init_philos(args);
+
+	t_philo	*philos;
+	philos = init_philos(&args);
+	print_philo_struct(philos);
 
 	return (0);
 }
