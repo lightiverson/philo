@@ -11,82 +11,78 @@ size_t right(size_t i, size_t num_of_philos)
 	return ((i + 1) % num_of_philos);
 }
 
-bool	str_is_numeric(const char *str)
+t_args	parse_args(int argc, const char *argv[5])
 {
-	char			*arr;
-	unsigned int	i;
+	t_args	args;
 
-	i = 0;
-	if (str[0] == '-')
-		i++;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (false);
-		i++;
-	}
-	arr = ft_itoa(ft_atoi(str));
-	if (!arr)
-	{
-		printf("Error: malloc()\n");
-		return (false);
-	}
-	if (ft_strlen(str) != ft_strlen(arr))
-	{
-		free(arr);
-		return (false);
-	}
-	free(arr);
-	return (true);
-}
-
-t_args	*parse_cla(int argc, const char *argv[5])
-{
-	t_args	*args;
-
-	args = malloc(sizeof(*args));
-	if (!args)
-		return (0);
-	args->n_of_philos = argv[1];
-	args->time_to_die = argv[2];
-	args->time_to_eat = argv[3];
-	args->time_to_sleep = argv[4];
-	args->number_of_times_to_eat = -1;
+	args.n_of_philos = ft_atoi(argv[0]);
+	args.time_to_die = ft_atoi(argv[1]);
+	args.time_to_eat = ft_atoi(argv[2]);
+	args.time_to_sleep = ft_atoi(argv[3]);
+	args.number_of_times_to_eat = -1;
 	if (argc == 6)
-		args->number_of_times_to_eat = argv[5];
+		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
 }
 
-bool	is_valid_cla(const char *arg)
+void	print_args_struct(t_args *args)
 {
-	if (!(*arg))
+	printf("t_args args\n");
+	printf("{\n");
+	printf("\tn_of_philos = %d\n", args->n_of_philos);
+	printf("\ttime_to_die = %d\n", args->time_to_die);
+	printf("\ttime_to_eat = %d\n", args->time_to_eat);
+	printf("\ttime_to_sleep = %d\n", args->time_to_sleep);
+	printf("\tnumber_of_times_to_eat = %d\n", args->number_of_times_to_eat);
+	printf("}\n");
+}
+
+// nu wil ik een array maken van philo instances (structs)
+// array is n_of_philos groot
+// hoe maak je een philo instance aan? -> 
+// declare -> malloc -> laat pointer ernaar wijzen
+t_philo	*init_philos(t_args args)
+{
+	int		i;
+	t_philo	*philos;
+
+	philos = malloc(sizeof(*philos) * args.n_of_philos);
+	if (!philos)
+		return (0);
+	i = 0;
+	while (i < args.n_of_philos)
 	{
-		printf("No empty strings allowed\n");
-		return (false);
+		philos[i].n_of_philos = args.n_of_philos;
+		philos[i].time_to_die = args.time_to_die;
+		philos[i].time_to_eat = args.time_to_eat;
+		philos[i].time_to_sleep = args.time_to_sleep;
+		philos[i].number_of_times_to_eat = args.number_of_times_to_eat;
+		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
+		philos[i].is_alive = true;
+		i++;
 	}
-	if (!str_is_numeric(arg))
-	{
-		printf("Only numeric characters are accepted\n");
-		return (false);
-	}
+	return (philos);
 }
 
 int main (int argc, const char *argv[5])
 {
-	// size_t i = 0;
-	// think(i);
-	// eat(i);
-	// sleep(i);
-
-	t_args	*args;
-
 	if (argc < 5 || argc > 6) // correct amount of args
-		return (-1);
+	{
+		ft_putendl_fd("Error: incorrect amount of args", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 
+	are_cla_valid(++argv);
+
+	t_args	args;
 	args = parse_args(argc, argv);
-	if (!args)
-		return (-1);
-
+	if (!are_philo_mem_pos(&args))
+	{
+		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	print_args_struct(&args);
+	init_philos(args);
 
 	return (0);
 }
