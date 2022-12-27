@@ -41,10 +41,23 @@ void	print_philo_struct(t_philo *philo)
 {
 	printf("t_philo philo\n");
 	printf("{\n");
+	printf("\tid = %d\n", philo->id);
 	printf("\tstate = %d\n", philo->state);
 	printf("\tis_alive = %d\n", philo->is_alive);
 	printf("\t*args = %p\n", philo->args);
 	printf("}\n");
+}
+
+void	print_philos(t_philo	*philos, int n_of_philos)
+{
+	int	i;
+
+	i = 0;
+	while (i < n_of_philos)
+	{
+		print_philo_struct(&philos[i]);
+		i++;
+	}
 }
 
 t_philo	*init_philos(t_args *args)
@@ -58,6 +71,7 @@ t_philo	*init_philos(t_args *args)
 	i = 0;
 	while (i < args->n_of_philos)
 	{
+		philos[i].id = i + 1;
 		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
 		philos[i].is_alive = true;
 		philos[i].args = args;
@@ -68,15 +82,15 @@ t_philo	*init_philos(t_args *args)
 
 int main (int argc, const char *argv[5])
 {
-	if (argc < 5 || argc > 6) // correct amount of args
+	t_args	args; // Moet sowieso op stack mem blijven.
+
+	if (argc < 5 || argc > 6)
 	{
 		ft_putendl_fd("Error: incorrect amount of args", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-
 	are_cla_valid(++argv);
 
-	t_args	args;
 	args = parse_args(argc, argv);
 	if (!are_philo_mem_pos(&args))
 	{
@@ -87,7 +101,8 @@ int main (int argc, const char *argv[5])
 
 	t_philo	*philos;
 	philos = init_philos(&args);
-	print_philo_struct(philos);
+	// print_philo_struct(philos);
+	print_philos(philos, args.n_of_philos);
 
 	return (0);
 }

@@ -11,7 +11,6 @@ RUN apt-get update && \
     libreadline-dev \
     strace \
     lldb \
-    git \
     -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \

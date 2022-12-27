@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/22 17:38:09 by kgajadie      ########   odam.nl         */
+/*   Updated: 2022/12/27 11:37:49 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@
 
 /* Private libraries */
 # include "philo.h"
+
+/*
+Dit kan je ook gebruiken om state bij te houden
+typedef struct s_state
+{
+	bool	thinking
+	bool	hungry
+	bool	eating
+	bool	sleeping
+	bool	is_alive
+}	t_state;
+*/
 
 enum e_state {
 	THINKING = 0,
@@ -37,6 +49,7 @@ typedef struct s_args
 
 typedef struct s_philo
 {
+	int		id;
 	int		state;
 	bool	is_alive;
 	t_args	*args;

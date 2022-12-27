@@ -22,3 +22,7 @@ Run code met readline in Ubuntu:
 ```bash
 gcc code.c -L/usr/local/lib -I/usr/local/include -lreadline
 ```
+
+1. Returned thread create functie een id? Nee, returned 0
+2. Je kan een void pointer als arg mee geven -> en 'em daarna naar een andere type pointer omzetten -> hiermee zou je functies kunnen generaliseren die verschillende soorten typen pointers gebruiken, maar wel dezelfde logica
+3. Wat is het verschil tussen pthreads.h en threads.h? Threads.h is nieuwe lib voor C11, maar online word aangeraden om oudere pthreads.h te gebruiken
