@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 16:56:28 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/29 18:20:41 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <pthread.h>
 
 #endif

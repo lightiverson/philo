@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 16:49:15 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/29 18:15:28 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* Public libraries */
 # include <stdbool.h>
-
+# include <pthread.h>
 /* Private libraries */
 
 /*
@@ -49,10 +49,11 @@ typedef struct s_args
 
 typedef struct s_philo
 {
-	int		id;
-	int		state;
-	bool	is_alive;
-	t_args	*args;
+	int				id;
+	int				state;
+	bool			is_alive;
+	t_args			*args;
+	pthread_mutex_t	fork;
 }	t_philo;
 
 #endif

@@ -25,14 +25,17 @@ t_args	parse_args(int argc, const char *argv[5])
 	return (args);
 }
 
-t_philo	*init_philos(t_args *args)
+t_philo	*philos_init(t_args *args)
 {
 	int		i;
 	t_philo	*philos;
 
 	philos = malloc(sizeof(*philos) * args->n_of_philos);
 	if (!philos)
+	{
+		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
 		return (0);
+	}
 	i = 0;
 	while (i < args->n_of_philos)
 	{
@@ -40,6 +43,11 @@ t_philo	*init_philos(t_args *args)
 		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
 		philos[i].is_alive = true;
 		philos[i].args = args;
+		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		{
+			ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+			return (0);
+		}
 		i++;
 	}
 	return (philos);
@@ -67,10 +75,20 @@ int main (int argc, const char *argv[5])
 	print_args_struct(&args);
 
 	t_philo	*philos;
-	philos = init_philos(&args);
+	philos = philos_init(&args);
+	if (!philos)
+	{
+		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	
 	print_philos(philos, args.n_of_philos);
 
 	think(&philos[0]);
+	// take_forks(&philos[0]);
+	eat(&philos[0]);
 
 	return (0);
 }
+
+// wat moet je doen met time to think?
