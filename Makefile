@@ -2,12 +2,14 @@ NAME =		philo
 MAIN =		obj/main.o
 OBJECTS =	obj/state.o \
 			obj/timestamp.o \
-			obj/validate.o
+			obj/validate.o \
+			obj/utils.o
 HEADERS =	philo.h \
 			structs.h \
 			validate.h \
 			state.h \
-			timestamp.h
+			timestamp.h \
+			utils.h
 CFLAGS ?=	-Wall -Wextra -Werror
 LDFLAGS ?=
 

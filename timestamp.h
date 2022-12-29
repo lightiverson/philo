@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:56:18 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/15 16:56:29 by kgajadie      ########   odam.nl         */
+/*   Updated: 2022/12/29 16:49:29 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* Public libraries */
 # include <sys/time.h>
 
-unsigned long	timeval_to_ms(struct timeval tv);
-unsigned long	get_current_timestamp_in_ms(void);
+long int	timeval_to_ms(struct timeval tv);
+long int	get_current_timestamp_in_ms(void);
 
 #endif

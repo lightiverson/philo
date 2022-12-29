@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo.h                                            :+:    :+:            */
+/*   utils.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
+/*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 16:56:28 by kawish        ########   odam.nl         */
+/*   Created: 2022/12/27 12:52:02 by kawish        #+#    #+#                 */
+/*   Updated: 2022/12/27 13:02:49 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef UTILS_H
+# define UTILS_H
 
-/* Private libraries */
 # include "structs.h"
-# include "state.h"
-# include "timestamp.h"
-# include "libft/libft.h"
-# include "validate.h"
-# include "utils.h"
-
-/* Public libraries */
-# include <stdlib.h>
 # include <stdio.h>
-# include <unistd.h>
+
+void	print_args_struct(t_args *args);
+void	print_philo_struct(t_philo *philo);
+void	print_philos(t_philo	*philos, int n_of_philos);
 
 #endif

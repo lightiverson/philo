@@ -25,41 +25,6 @@ t_args	parse_args(int argc, const char *argv[5])
 	return (args);
 }
 
-void	print_args_struct(t_args *args)
-{
-	printf("t_args args\n");
-	printf("{\n");
-	printf("\tn_of_philos = %d\n", args->n_of_philos);
-	printf("\ttime_to_die = %d\n", args->time_to_die);
-	printf("\ttime_to_eat = %d\n", args->time_to_eat);
-	printf("\ttime_to_sleep = %d\n", args->time_to_sleep);
-	printf("\tnumber_of_times_to_eat = %d\n", args->number_of_times_to_eat);
-	printf("}\n");
-}
-
-void	print_philo_struct(t_philo *philo)
-{
-	printf("t_philo philo\n");
-	printf("{\n");
-	printf("\tid = %d\n", philo->id);
-	printf("\tstate = %d\n", philo->state);
-	printf("\tis_alive = %d\n", philo->is_alive);
-	printf("\t*args = %p\n", philo->args);
-	printf("}\n");
-}
-
-void	print_philos(t_philo	*philos, int n_of_philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < n_of_philos)
-	{
-		print_philo_struct(&philos[i]);
-		i++;
-	}
-}
-
 t_philo	*init_philos(t_args *args)
 {
 	int		i;
@@ -84,6 +49,8 @@ int main (int argc, const char *argv[5])
 {
 	t_args	args; // Moet sowieso op stack mem blijven.
 
+	args.start_time = get_current_timestamp_in_ms();
+
 	if (argc < 5 || argc > 6)
 	{
 		ft_putendl_fd("Error: incorrect amount of args", STDERR_FILENO);
@@ -101,8 +68,9 @@ int main (int argc, const char *argv[5])
 
 	t_philo	*philos;
 	philos = init_philos(&args);
-	// print_philo_struct(philos);
 	print_philos(philos, args.n_of_philos);
+
+	think(&philos[0]);
 
 	return (0);
 }

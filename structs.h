@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/27 11:37:49 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/29 16:49:15 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdbool.h>
 
 /* Private libraries */
-# include "philo.h"
 
 /*
 Dit kan je ook gebruiken om state bij te houden
@@ -45,6 +44,7 @@ typedef struct s_args
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	number_of_times_to_eat;
+	long int start_time;
 }	t_args;
 
 typedef struct s_philo
