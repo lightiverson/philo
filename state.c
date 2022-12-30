@@ -6,31 +6,11 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 18:09:50 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/30 14:29:37 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "state.h"
-
-// void test(t_philo *philo, size_t i) 
-// { 
-// 	 // i: philosopher number, from 0 to N-1
-// 	if (state[i] == State::HUNGRY && state[left(i)] != State::EATING && state[right(i)] != State::EATING) 
-// 	{
-// 		state[i] = State::EATING;
-// 		both_forks_available[i].release();
-// 	}
-// }
-
-// void	take_forks(t_philo *philo)
-// {
-// 	// enter critical region
-// 	philo->state = HUNGRY; // is trying to take a fork
-// 	printf("%ld %d has taken a fork\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-// 	test(philo); // try to acquire 2 forks
-// 	// exit critical region
-// 	// block if forks were not aquired
-// }
 
 /*
 mutex forks
@@ -52,6 +32,7 @@ void	philo_sleep(int i)
 
 void	has_died(int i)
 {
+	(void)i;
 	// timestamp_in_ms X died
 	;
 }
@@ -65,4 +46,16 @@ void	think(t_philo *philo)
 {
 	usleep(philo->args->time_to_sleep * 1000);
 	printf("%ld %d is thinking\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
+}
+
+// think(&philos[0]);
+// take_forks(&philos[0]);
+// eat(&philos[0]);
+void*	philosophize(void* arg)
+{
+	t_philo	*p;
+	
+	p = (t_philo*)arg;
+	think(p);
+	return (0);
 }

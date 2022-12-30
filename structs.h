@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 18:15:28 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/29 21:34:58 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_philo
 	bool			is_alive;
 	t_args			*args;
 	pthread_mutex_t	fork;
+	pthread_t		thread;
 }	t_philo;
 
 #endif

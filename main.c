@@ -50,14 +50,34 @@ t_philo	*philos_init(t_args *args)
 		}
 		i++;
 	}
+	i = 0;
+	args->start_time = get_current_timestamp_in_ms();
+	while (i < args->n_of_philos)
+	{
+		if (pthread_create(&(philos[i].thread), 0, philosophize, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		{
+			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
+			return (0);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < args->n_of_philos)
+	{
+		if (pthread_join(philos[i].thread, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		{
+			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
+			return (0);
+		}
+		i++;
+	}
 	return (philos);
 }
 
 int main (int argc, const char *argv[5])
 {
 	t_args	args; // Moet sowieso op stack mem blijven.
-
-	args.start_time = get_current_timestamp_in_ms();
+	t_philo	*philos;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -72,23 +92,15 @@ int main (int argc, const char *argv[5])
 		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	print_args_struct(&args);
+	// print_args_struct(&args);
 
-	t_philo	*philos;
 	philos = philos_init(&args);
 	if (!philos)
 	{
 		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	
-	print_philos(philos, args.n_of_philos);
-
-	think(&philos[0]);
-	// take_forks(&philos[0]);
-	eat(&philos[0]);
+	// print_philos(philos, args.n_of_philos);
 
 	return (0);
 }
-
-// wat moet je doen met time to think?
