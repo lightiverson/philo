@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:45:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/30 15:23:29 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/30 16:55:55 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "utils.h"
 
 void	eat(t_philo *philo);
-void	philo_sleep(int i);
+void	_sleep(t_philo *philo);
 void	has_died(int i);
 void	think(t_philo *philo);
 void*	philosophize(void* arg);

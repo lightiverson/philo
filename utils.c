@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2022/12/29 18:36:41 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/30 16:53:55 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_args_struct(t_args *args)
 	printf("\ttime_to_sleep = %d\n", args->time_to_sleep);
 	printf("\tnumber_of_times_to_eat = %d\n", args->number_of_times_to_eat);
 	printf("\tstart_time = %ld\n", args->start_time);
-	printf("}\n");
+	printf("}\n\n");
 }
 
 void	print_philo_struct(t_philo *philo)

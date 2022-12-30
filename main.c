@@ -1,16 +1,6 @@
 #include "philo.h"
 // Moet ik ook mutex gebruiken om stdout te locken?
 
-size_t left(size_t i)
-{
-	return (i);
-}
-
-size_t right(size_t i, size_t num_of_philos)
-{
-	return ((i + 1) % num_of_philos);
-}
-
 t_args	parse_args(int argc, const char *argv[5])
 {
 	t_args	args;
@@ -36,6 +26,7 @@ t_philo	*philos_init(t_args *args)
 		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
 		return (0);
 	}
+
 	i = 0;
 	while (i < args->n_of_philos)
 	{
@@ -50,6 +41,7 @@ t_philo	*philos_init(t_args *args)
 		}
 		i++;
 	}
+
 	i = 0;
 	args->start_time = get_current_timestamp_in_ms();
 	while (i < args->n_of_philos)
@@ -61,6 +53,7 @@ t_philo	*philos_init(t_args *args)
 		}
 		i++;
 	}
+
 	i = 0;
 	while (i < args->n_of_philos)
 	{
@@ -71,6 +64,7 @@ t_philo	*philos_init(t_args *args)
 		}
 		i++;
 	}
+
 	return (philos);
 }
 
@@ -92,7 +86,7 @@ int main (int argc, const char *argv[5])
 		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	// print_args_struct(&args);
+	print_args_struct(&args);
 
 	philos = philos_init(&args);
 	if (!philos)
