@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:45:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 22:01:08 by kawish        ########   odam.nl         */
+/*   Updated: 2022/12/30 15:23:29 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 /* Private libraries */
 # include "structs.h"
 # include "timestamp.h"
+# include "utils.h"
 
 void	eat(t_philo *philo);
 void	philo_sleep(int i);
