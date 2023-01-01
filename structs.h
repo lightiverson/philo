@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 21:34:58 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 17:56:26 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,18 @@ enum e_state {
 
 typedef struct s_args
 {
-	int	n_of_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	number_of_times_to_eat;
-	long int start_time;
+	bool		has_died;
+	int			n_of_philos;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			number_of_times_to_eat;
+	long int	start_time;
 }	t_args;
 
 typedef struct s_philo
 {
+	long int		last_ate;
 	int				id;
 	int				state;
 	bool			is_alive;

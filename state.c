@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/30 17:10:59 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 18:05:28 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	_sleep(t_philo *philo)
 	usleep(philo->args->time_to_sleep * 1000);
 }
 
-void	has_died(int i)
+void	has_died(t_philo *philo)
 {
-	printf("%ld\t%d\tdied\n", get_current_timestamp_in_ms(), i);
+	printf("%ld\t%d\tdied\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
 }
 
 void take_forks(t_philo *philo)
@@ -52,6 +52,7 @@ void	eat(t_philo *philo)
 {
 	printf("%ld\t%d\tis eating\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
 	usleep(philo->args->time_to_eat * 1000);
+	philo->last_ate = get_current_timestamp_in_ms();
 }
 
 void put_forks(t_philo *philo)
@@ -78,11 +79,20 @@ void*	philosophize(void* arg)
 	
 	p = (t_philo*)arg;
 
-	take_forks(p);
-	eat(p);
-	put_forks(p);
-	_sleep(p);
-	think(p);
+	// take_forks(p);
 
+	// usleep(400000);
+	if (get_current_timestamp_in_ms() - p->args->start_time > p->args->time_to_die)
+	{
+		has_died(p);
+		p->args->has_died = true;
+	}
+	if (!p->args->has_died)
+	{
+		eat(p);
+		// put_forks(p);
+		_sleep(p);
+		think(p);
+	}
 	return (0);
 }

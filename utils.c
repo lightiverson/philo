@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2022/12/30 16:53:55 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 17:11:35 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	print_philo_struct(t_philo *philo)
 {
 	printf("t_philo philo\n");
 	printf("{\n");
+	printf("\tlast_ate = %ld\n", philo->last_ate);
 	printf("\tid = %d\n", philo->id);
 	printf("\tstate = %d\n", philo->state);
 	printf("\tis_alive = %d\n", philo->is_alive);

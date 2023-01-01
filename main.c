@@ -5,6 +5,7 @@ t_args	parse_args(int argc, const char *argv[5])
 {
 	t_args	args;
 
+	args.has_died = false;
 	args.n_of_philos = ft_atoi(argv[0]);
 	args.time_to_die = ft_atoi(argv[1]);
 	args.time_to_eat = ft_atoi(argv[2]);
@@ -30,6 +31,7 @@ t_philo	*philos_init(t_args *args)
 	i = 0;
 	while (i < args->n_of_philos)
 	{
+		philos[i].last_ate = 0;
 		philos[i].id = i + 1;
 		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
 		philos[i].is_alive = true;
@@ -94,7 +96,12 @@ int main (int argc, const char *argv[5])
 		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	// print_philos(philos, args.n_of_philos);
+	print_philos(philos, args.n_of_philos);
 
 	return (0);
 }
+
+// ik moet checken of een philo gegeten heeft binnen 400ms nadat het programma gestart is.
+// hiervoor heb je een variabel nodig -> timestamp wanneer voor het laatst gegeten.
+
+// If a philosopher didn’t start eating time_to_die milliseconds since the beginning of their last meal or the beginning of the sim- ulation, they die.
