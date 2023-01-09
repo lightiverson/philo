@@ -5,6 +5,11 @@ t_args	parse_args(int argc, const char *argv[5])
 {
 	t_args	args;
 
+	if (pthread_mutex_init(&args.critical_region, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+	{
+		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		// return (0);
+	}
 	args.has_died = false;
 	args.n_of_philos = ft_atoi(argv[0]);
 	args.time_to_die = ft_atoi(argv[1]);
@@ -31,7 +36,7 @@ t_philo	*philos_init(t_args *args)
 	i = 0;
 	while (i < args->n_of_philos)
 	{
-		philos[i].last_ate = 0;
+		philos[i].last_meal = 0;
 		philos[i].id = i + 1;
 		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
 		philos[i].is_alive = true;

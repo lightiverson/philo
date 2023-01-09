@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/01 17:56:26 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 18:56:44 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ enum e_state {
 
 typedef struct s_args
 {
+	pthread_mutex_t	critical_region;
 	bool		has_died;
 	int			n_of_philos;
 	int			time_to_die;
@@ -50,7 +51,7 @@ typedef struct s_args
 
 typedef struct s_philo
 {
-	long int		last_ate;
+	long int		last_meal;
 	int				id;
 	int				state;
 	bool			is_alive;

@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/01 17:11:35 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 18:23:01 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	print_args_struct(t_args *args)
 {
 	printf("t_args args\n");
 	printf("{\n");
+	printf("\thas_died = %d\n", args->has_died);
 	printf("\tn_of_philos = %d\n", args->n_of_philos);
 	printf("\ttime_to_die = %d\n", args->time_to_die);
 	printf("\ttime_to_eat = %d\n", args->time_to_eat);
@@ -29,7 +30,7 @@ void	print_philo_struct(t_philo *philo)
 {
 	printf("t_philo philo\n");
 	printf("{\n");
-	printf("\tlast_ate = %ld\n", philo->last_ate);
+	printf("\tlast_meal = %ld\n", philo->last_meal);
 	printf("\tid = %d\n", philo->id);
 	printf("\tstate = %d\n", philo->state);
 	printf("\tis_alive = %d\n", philo->is_alive);

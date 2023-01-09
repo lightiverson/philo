@@ -6,21 +6,23 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/01 18:05:28 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/01 18:36:34 by kawish        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "state.h"
 
-void	think(t_philo *philo)
+void	_sleep_think(t_philo *philo)
 {
-	printf("%ld\t%d\tis thinking\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-}
-
-void	_sleep(t_philo *philo)
-{
+	if (philo->last_meal && (get_current_timestamp_in_ms() - philo->last_meal > philo->args->time_to_die))
+	{
+		has_died(philo);
+		philo->args->has_died = true;
+		return;
+	}
 	printf("%ld\t%d\tis sleeping\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
 	usleep(philo->args->time_to_sleep * 1000);
+	printf("%ld\t%d\tis thinking\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
 }
 
 void	has_died(t_philo *philo)
@@ -50,9 +52,15 @@ void take_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
+	if (philo->last_meal && (get_current_timestamp_in_ms() - philo->last_meal > philo->args->time_to_die))
+	{
+		has_died(philo);
+		philo->args->has_died = true;
+		return;
+	}
 	printf("%ld\t%d\tis eating\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
 	usleep(philo->args->time_to_eat * 1000);
-	philo->last_ate = get_current_timestamp_in_ms();
+	philo->last_meal = get_current_timestamp_in_ms();
 }
 
 void put_forks(t_philo *philo)
@@ -80,19 +88,17 @@ void*	philosophize(void* arg)
 	p = (t_philo*)arg;
 
 	// take_forks(p);
+	// put_forks(p);
 
-	// usleep(400000);
 	if (get_current_timestamp_in_ms() - p->args->start_time > p->args->time_to_die)
 	{
-		has_died(p);
 		p->args->has_died = true;
+		has_died(p);
 	}
 	if (!p->args->has_died)
-	{
 		eat(p);
-		// put_forks(p);
-		_sleep(p);
-		think(p);
-	}
+	if (!p->args->has_died)
+		_sleep_think(p);
+
 	return (0);
 }
