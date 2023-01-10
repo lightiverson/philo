@@ -5,12 +5,6 @@ t_args	parse_args(int argc, const char *argv[5])
 {
 	t_args	args;
 
-	if (pthread_mutex_init(&args.critical_region, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
-	{
-		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
-		// return (0);
-	}
-	args.has_died = false;
 	args.n_of_philos = ft_atoi(argv[0]);
 	args.time_to_die = ft_atoi(argv[1]);
 	args.time_to_eat = ft_atoi(argv[2]);
@@ -21,12 +15,12 @@ t_args	parse_args(int argc, const char *argv[5])
 	return (args);
 }
 
-t_philo	*philos_init(t_args *args)
+t_philo	*philos_init(t_args args, t_shared *shared)
 {
-	int		i;
 	t_philo	*philos;
+	int		i;
 
-	philos = malloc(sizeof(*philos) * args->n_of_philos);
+	philos = malloc(sizeof(*philos) * args.n_of_philos);
 	if (!philos)
 	{
 		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
@@ -34,13 +28,12 @@ t_philo	*philos_init(t_args *args)
 	}
 
 	i = 0;
-	while (i < args->n_of_philos)
+	while (i < args.n_of_philos)
 	{
-		philos[i].last_meal = 0;
 		philos[i].id = i + 1;
-		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
-		philos[i].is_alive = true;
 		philos[i].args = args;
+		philos[i].last_meal = 0;
+		philos[i].shared = shared;
 		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
 			ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
@@ -50,8 +43,8 @@ t_philo	*philos_init(t_args *args)
 	}
 
 	i = 0;
-	args->start_time = get_current_timestamp_in_ms();
-	while (i < args->n_of_philos)
+	args.start_time = get_current_timestamp_in_ms();
+	while (i < args.n_of_philos)
 	{
 		if (pthread_create(&(philos[i].thread), 0, philosophize, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
@@ -62,7 +55,7 @@ t_philo	*philos_init(t_args *args)
 	}
 
 	i = 0;
-	while (i < args->n_of_philos)
+	while (i < args.n_of_philos)
 	{
 		if (pthread_join(philos[i].thread, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
@@ -75,10 +68,29 @@ t_philo	*philos_init(t_args *args)
 	return (philos);
 }
 
+t_shared *make_shared(void)
+{
+	t_shared	*shared;
+
+	shared = malloc(sizeof(*shared));
+	if (!shared)
+	{
+		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
+		return (0);
+	}
+	shared->has_died = false;
+	if (pthread_mutex_init(&shared->critical_region, 0))
+	{
+		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		return (0);
+	}
+}
+
 int main (int argc, const char *argv[5])
 {
-	t_args	args; // Moet sowieso op stack mem blijven.
-	t_philo	*philos;
+	t_args		args;
+	t_philo		*philos;
+	t_shared	*shared;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -93,15 +105,23 @@ int main (int argc, const char *argv[5])
 		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
+
+	shared = make_shared();
+	if (!shared)
+	{
+		ft_putendl_fd("Error: make_shared()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+
 	print_args_struct(&args);
 
-	philos = philos_init(&args);
+	philos = philos_init(args, shared);
 	if (!philos)
 	{
 		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	print_philos(philos, args.n_of_philos);
+	// print_philos(philos, args.n_of_philos);
 
 	return (0);
 }

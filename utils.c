@@ -6,23 +6,22 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/01 18:23:01 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/10 16:56:27 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-void	print_args_struct(t_args *args)
+void	print_args_struct(t_args args)
 {
 	printf("t_args args\n");
 	printf("{\n");
-	printf("\thas_died = %d\n", args->has_died);
-	printf("\tn_of_philos = %d\n", args->n_of_philos);
-	printf("\ttime_to_die = %d\n", args->time_to_die);
-	printf("\ttime_to_eat = %d\n", args->time_to_eat);
-	printf("\ttime_to_sleep = %d\n", args->time_to_sleep);
-	printf("\tnumber_of_times_to_eat = %d\n", args->number_of_times_to_eat);
-	printf("\tstart_time = %ld\n", args->start_time);
+	printf("\tn_of_philos = %d\n", args.n_of_philos);
+	printf("\ttime_to_die = %d\n", args.time_to_die);
+	printf("\ttime_to_eat = %d\n", args.time_to_eat);
+	printf("\ttime_to_sleep = %d\n", args.time_to_sleep);
+	printf("\tnumber_of_times_to_eat = %d\n", args.number_of_times_to_eat);
+	printf("\tstart_time = %ld\n", args.start_time);
 	printf("}\n\n");
 }
 
@@ -32,8 +31,6 @@ void	print_philo_struct(t_philo *philo)
 	printf("{\n");
 	printf("\tlast_meal = %ld\n", philo->last_meal);
 	printf("\tid = %d\n", philo->id);
-	printf("\tstate = %d\n", philo->state);
-	printf("\tis_alive = %d\n", philo->is_alive);
 	printf("\t*args = %p\n", philo->args);
 	printf("\tfork = %p\n", &philo->fork);
 	printf("}\n");
