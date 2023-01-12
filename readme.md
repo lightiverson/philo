@@ -2,7 +2,7 @@
 
 Bouw image genaamd ubuntu-philo op basis van Dockerfile:
 ```bash
-docker build -t  ubuntu-philo.
+docker build -t ubuntu-philo .
 ```
 
 Draai container op basis van image genaamd  ubuntu-philo met mounted eigen folder:

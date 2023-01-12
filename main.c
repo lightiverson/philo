@@ -43,7 +43,6 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	}
 
 	i = 0;
-	args.start_time = get_current_timestamp_in_ms();
 	while (i < args.n_of_philos)
 	{
 		if (pthread_create(&(philos[i].thread), 0, philosophize, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
@@ -84,6 +83,7 @@ t_shared *make_shared(void)
 		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
 		return (0);
 	}
+	return (shared);
 }
 
 int main (int argc, const char *argv[5])
@@ -100,7 +100,7 @@ int main (int argc, const char *argv[5])
 	are_cla_valid(++argv);
 
 	args = parse_args(argc, argv);
-	if (!are_philo_mem_pos(&args))
+	if (!are_philo_mem_pos(args))
 	{
 		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
 		return (EXIT_FAILURE);
@@ -113,7 +113,7 @@ int main (int argc, const char *argv[5])
 		return (EXIT_FAILURE);
 	}
 
-	print_args_struct(&args);
+	print_args_struct(args);
 
 	philos = philos_init(args, shared);
 	if (!philos)
