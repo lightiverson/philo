@@ -1,6 +1,7 @@
 NAME =		philo
 MAIN =		obj/main.o
 OBJECTS =	obj/state.o \
+			obj/state_cont.o \
 			obj/timestamp.o \
 			obj/validate.o \
 			obj/utils.o

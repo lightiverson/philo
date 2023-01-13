@@ -1,5 +1,32 @@
 #include "philo.h"
-// Moet ik ook mutex gebruiken om stdout te locken?
+
+void*	philosophize(void* arg)
+{
+	t_philo	*philo;
+	
+	philo = (t_philo*)arg;
+
+	// take_forks(p);
+	// put_forks(p);
+
+	// 0. loop zolang een philo niet is doodgegaan - maar kan een philo niet dood zijn gegaan terwijl een andere philo nog in de while loop zit?
+	//     voeg nog check toe voor elke state functie om te kijken of een philo leeft
+	// 1. check of time_to_die niet verstreken is sinds de start van het programma
+	// 2.
+	// voor elke state change wil ik checken of iemand is doodgegaan
+
+	philo->args.start_time = get_current_timestamp_in_ms();
+	while (true)
+	{
+		take_forks(philo);
+		eat(philo);
+		put_forks(philo);
+		_sleep(philo);
+		think(philo);
+	}
+
+	return (0);
+}
 
 t_args	parse_args(int argc, const char *argv[5])
 {
@@ -13,6 +40,30 @@ t_args	parse_args(int argc, const char *argv[5])
 	if (argc == 6)
 		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
+}
+
+t_shared *make_shared(void)
+{
+	t_shared	*shared;
+
+	shared = malloc(sizeof(*shared));
+	if (!shared)
+	{
+		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
+		return (0);
+	}
+	shared->has_died = false;
+	if (pthread_mutex_init(&shared->critical_region_mtx, 0))
+	{
+		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		return (0);
+	}
+	if (pthread_mutex_init(&shared->output_mtx, 0))
+	{
+		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		return (0);
+	}
+	return (shared);
 }
 
 t_philo	*philos_init(t_args args, t_shared *shared)
@@ -32,7 +83,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	{
 		philos[i].id = i + 1;
 		philos[i].args = args;
-		philos[i].last_meal = 0;
+		philos[i].last_meal_timestamp = 0;
 		philos[i].shared = shared;
 		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
@@ -67,26 +118,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	return (philos);
 }
 
-t_shared *make_shared(void)
-{
-	t_shared	*shared;
-
-	shared = malloc(sizeof(*shared));
-	if (!shared)
-	{
-		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
-		return (0);
-	}
-	shared->has_died = false;
-	if (pthread_mutex_init(&shared->critical_region, 0))
-	{
-		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
-		return (0);
-	}
-	return (shared);
-}
-
-int main (int argc, const char *argv[5])
+int	main (int argc, const char *argv[5])
 {
 	t_args		args;
 	t_philo		*philos;
@@ -126,7 +158,4 @@ int main (int argc, const char *argv[5])
 	return (0);
 }
 
-// ik moet checken of een philo gegeten heeft binnen 400ms nadat het programma gestart is.
-// hiervoor heb je een variabel nodig -> timestamp wanneer voor het laatst gegeten.
-
-// If a philosopher didn’t start eating time_to_die milliseconds since the beginning of their last meal or the beginning of the sim- ulation, they die.
+// Moet ik ook mutex gebruiken om stdout te locken?
