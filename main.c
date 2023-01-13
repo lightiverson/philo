@@ -1,5 +1,24 @@
 #include "philo.h"
 
+void*	monitor(void* arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo*)arg;
+
+	while (1)
+	{
+		pthread_mutex_lock(&philo->shared->critical_region_mtx);
+		if (philo->last_meal_timestamp - get_current_timestamp_in_ms() <= philo->args.time_to_die)
+		{
+			pthread_mutex_unlock(&philo->shared->critical_region_mtx);
+			has_died(philo);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->shared->critical_region_mtx);
+	}
+}
+
 void*	philosophize(void* arg)
 {
 	t_philo	*philo;
@@ -16,12 +35,15 @@ void*	philosophize(void* arg)
 	// voor elke state change wil ik checken of iemand is doodgegaan
 
 	philo->args.start_time = get_current_timestamp_in_ms();
-	while (true)
+	while (!get_has_died_mutex(philo))
 	{
 		take_forks(philo);
+		// state
 		eat(philo);
 		put_forks(philo);
+		// state
 		_sleep(philo);
+		// state
 		think(philo);
 	}
 
@@ -118,6 +140,29 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	return (philos);
 }
 
+pthread_t	*monitor_init(t_philo *philos)
+{
+	pthread_t	*thread;
+
+	thread = malloc(sizeof(*thread));
+	if (!thread)
+	{
+		ft_putendl_fd("Error: malloc()\n", STDERR_FILENO);
+		return (0);
+	}
+	if (pthread_create(thread, 0, monitor, (void*)philos))
+	{
+		ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
+		return (0);
+	}
+	if (pthread_join(*thread, 0))
+	{
+		ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
+		return (0);
+	}
+	return (thread);
+}
+
 int	main (int argc, const char *argv[5])
 {
 	t_args		args;
@@ -148,6 +193,7 @@ int	main (int argc, const char *argv[5])
 	print_args_struct(args);
 
 	philos = philos_init(args, shared);
+	monitor_init(philos);
 	if (!philos)
 	{
 		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);

@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/13 11:37:28 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/13 17:01:36 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	eat(t_philo *philo)
 {
+	usleep(1000);
 	printf_mutex_lock(philo, "%ld\t%d\tis eating\n");
 	better_sleep(philo->args.time_to_eat);
 	philo->last_meal_timestamp = get_current_timestamp_in_ms();

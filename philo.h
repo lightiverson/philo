@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 18:20:41 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/13 16:20:25 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <pthread.h>
+
+void*	monitor(void* arg);
 
 #endif
