@@ -1,56 +1,6 @@
 #include "philo.h"
 
-void*	monitor(void* arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo*)arg;
-
-	while (1)
-	{
-		pthread_mutex_lock(&philo->shared->critical_region_mtx);
-		if (philo->last_meal_timestamp - get_current_timestamp_in_ms() <= philo->args.time_to_die)
-		{
-			pthread_mutex_unlock(&philo->shared->critical_region_mtx);
-			has_died(philo);
-			return (0);
-		}
-		pthread_mutex_unlock(&philo->shared->critical_region_mtx);
-	}
-}
-
-void*	philosophize(void* arg)
-{
-	t_philo	*philo;
-	
-	philo = (t_philo*)arg;
-
-	// take_forks(p);
-	// put_forks(p);
-
-	// 0. loop zolang een philo niet is doodgegaan - maar kan een philo niet dood zijn gegaan terwijl een andere philo nog in de while loop zit?
-	//     voeg nog check toe voor elke state functie om te kijken of een philo leeft
-	// 1. check of time_to_die niet verstreken is sinds de start van het programma
-	// 2.
-	// voor elke state change wil ik checken of iemand is doodgegaan
-
-	philo->args.start_time = get_current_timestamp_in_ms();
-	while (!get_has_died_mutex(philo))
-	{
-		take_forks(philo);
-		// state
-		eat(philo);
-		put_forks(philo);
-		// state
-		_sleep(philo);
-		// state
-		think(philo);
-	}
-
-	return (0);
-}
-
-t_args	parse_args(int argc, const char *argv[5])
+t_args	args_parse(int argc, const char *argv[5])
 {
 	t_args	args;
 
@@ -58,31 +8,33 @@ t_args	parse_args(int argc, const char *argv[5])
 	args.time_to_die = ft_atoi(argv[1]);
 	args.time_to_eat = ft_atoi(argv[2]);
 	args.time_to_sleep = ft_atoi(argv[3]);
-	args.number_of_times_to_eat = -1;
+	args.number_of_times_to_eat = 1;
 	if (argc == 6)
 		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
 }
 
-t_shared *make_shared(void)
+t_shared *shared_init(void)
 {
 	t_shared	*shared;
 
 	shared = malloc(sizeof(*shared));
 	if (!shared)
 	{
-		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
+		ft_putendl_fd("Error: malloc()", STDERR_FILENO);
 		return (0);
 	}
 	shared->has_died = false;
 	if (pthread_mutex_init(&shared->critical_region_mtx, 0))
 	{
-		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		free(shared);
+		ft_putendl_fd("Error: pthread_mutex_init(critical_region_mtx)", STDERR_FILENO);
 		return (0);
 	}
 	if (pthread_mutex_init(&shared->output_mtx, 0))
 	{
-		ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+		free(shared);
+		ft_putendl_fd("Error: pthread_mutex_init(output_mtx)", STDERR_FILENO);
 		return (0);
 	}
 	return (shared);
@@ -109,58 +61,140 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		philos[i].shared = shared;
 		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
-			ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
+			free(shared);
+			free(philos);
+			ft_putendl_fd("Error: pthread_mutex_init(fork)", STDERR_FILENO);
 			return (0);
 		}
 		i++;
 	}
+	return (philos);
+}
+
+/*
+if 1 -> exit
+*/
+int	philos_start(t_args args, t_philo *philos)
+{
+	int	i;
 
 	i = 0;
 	while (i < args.n_of_philos)
 	{
-		if (pthread_create(&(philos[i].thread), 0, philosophize, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		if (pthread_create(&(philos[i].thread), 0, philo_routine, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
-			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
+			free(philos[i].shared);
+			free(philos);
+			ft_putendl_fd("Error: pthread_create(thread)", STDERR_FILENO);
 			return (0);
 		}
+		philos[i].last_meal_timestamp = get_current_timestamp_in_ms();
 		i++;
 	}
+	return (1);
+}
 
+/*
+if 0 -> exit
+*/
+pthread_t	*monitor_init_start(t_philo *philos)
+{
+	pthread_t	*monitor;
+
+	monitor = malloc(sizeof(*monitor));
+	if (!monitor)
+	{
+		free(philos->shared);
+		free(philos);
+		ft_putendl_fd("Error: malloc()", STDERR_FILENO);
+		return (0);
+	}
+	if (pthread_create(monitor, 0, monitor_routine, (void*)philos))
+	{
+		free(monitor);
+		free(philos->shared);
+		free(philos);
+		ft_putendl_fd("Error: creating monitor thread failed", STDERR_FILENO);
+		return (0);
+	}
+	return (monitor);
+}
+
+/*
+if 1 -> exit
+*/
+int	philos_monitor_join(t_args args, pthread_t *monitor, t_philo *philos)
+{
+	int	i;
+
+	if (pthread_join(*monitor, 0))
+	{
+		free(monitor);
+		free(philos->shared);
+		free(philos);
+		ft_putendl_fd("Error: joining monitor failed", STDERR_FILENO);
+		return (1);
+	}
 	i = 0;
 	while (i < args.n_of_philos)
 	{
 		if (pthread_join(philos[i].thread, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
 		{
-			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
-			return (0);
+			free(monitor);
+			free(philos->shared);
+			free(philos);
+			ft_putendl_fd("Error: joining philos failed", STDERR_FILENO);
+			return (1);
 		}
 		i++;
 	}
-
-	return (philos);
+	return (0);
 }
 
-pthread_t	*monitor_init(t_philo *philos)
+void*	monitor_routine(void* arg)
 {
-	pthread_t	*thread;
+	t_philo	*philo;
 
-	thread = malloc(sizeof(*thread));
-	if (!thread)
+	philo = (t_philo*)arg;
+	while (1)
 	{
-		ft_putendl_fd("Error: malloc()\n", STDERR_FILENO);
-		return (0);
+		pthread_mutex_lock(&philo->shared->critical_region_mtx);
+		if (get_current_timestamp_in_ms() - philo->last_meal_timestamp >= philo->args.time_to_die)
+		{
+			pthread_mutex_unlock(&philo->shared->critical_region_mtx);
+			has_died(philo);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo->shared->critical_region_mtx);
 	}
-	if (pthread_create(thread, 0, monitor, (void*)philos))
+}
+
+void*	philo_routine(void* arg)
+{
+	t_philo	*philo;
+	
+	philo = (t_philo*)arg;
+
+	// take_forks(p);
+	// put_forks(p);
+
+	// 0. loop zolang een philo niet is doodgegaan - maar kan een philo niet dood zijn gegaan terwijl een andere philo nog in de while loop zit?
+	//     voeg nog check toe voor elke state functie om te kijken of een philo leeft
+	// 1. check of time_to_die niet verstreken is sinds de start van het programma
+	// 2.
+	// voor elke state change wil ik checken of iemand is doodgegaan
+
+	philo->args.start_time = get_current_timestamp_in_ms();
+	while (!get_has_died_mutex(philo))
 	{
-		ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
-		return (0);
+		// take_forks(philo);
+		eat(philo);
+		// put_forks(philo);
+		_sleep(philo);
+		think(philo);
 	}
-	if (pthread_join(*thread, 0))
-	{
-		ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
-		return (0);
-	}
-	return (thread);
+
+	return (0);
 }
 
 int	main (int argc, const char *argv[5])
@@ -168,6 +202,7 @@ int	main (int argc, const char *argv[5])
 	t_args		args;
 	t_philo		*philos;
 	t_shared	*shared;
+	pthread_t	*monitor;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -176,24 +211,37 @@ int	main (int argc, const char *argv[5])
 	}
 	are_cla_valid(++argv);
 
-	args = parse_args(argc, argv);
+	args = args_parse(argc, argv);
 	if (!are_philo_mem_pos(args))
 	{
 		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 
-	shared = make_shared();
+	shared = shared_init();
 	if (!shared)
 	{
-		ft_putendl_fd("Error: make_shared()", STDERR_FILENO);
+		ft_putendl_fd("Error: shared_init()", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 
 	print_args_struct(args);
 
 	philos = philos_init(args, shared);
-	monitor_init(philos);
+	if (!philos)
+	{
+		ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+
+	if (!philos_start(args, philos))
+	{
+		ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	
+	monitor = monitor_init_start(philos);
+	philos_monitor_join(args, monitor, philos);
 	if (!philos)
 	{
 		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);

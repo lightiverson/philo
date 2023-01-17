@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:45:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/13 11:37:32 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/17 17:25:42 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	set_has_died_mutex(t_philo *philo);
 bool	get_has_died_mutex(t_philo	*philo);
 void	take_forks(t_philo *philo);
 void	put_forks(t_philo *philo);
-void	printf_mutex_lock(t_philo *philo, char *str);
+void	print_state(t_philo *philo, char *str);
 
 /* state.c */
 void	eat(t_philo *philo);

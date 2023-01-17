@@ -6,13 +6,13 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/12 15:13:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/13 11:52:06 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/17 17:25:42 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "state.h"
 
-void	printf_mutex_lock(t_philo *philo, char *str)
+void	print_state(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->shared->output_mtx);
 	printf(str, get_current_timestamp_in_ms() - philo->args.start_time,
