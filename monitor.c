@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:53:20 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/18 11:56:20 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/18 12:05:14 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ pthread_t	*monitor_init_start(t_philo *philos)
 		ft_putendl_fd("Error: malloc()", STDERR_FILENO);
 		return (0);
 	}
-	if (pthread_create(monitor, 0, monitor_routine, (void*)philos))
+	if (pthread_create(monitor, 0, monitor_routine, (void *)philos))
 	{
 		free(monitor);
 		free(philos->shared);
@@ -35,15 +35,16 @@ pthread_t	*monitor_init_start(t_philo *philos)
 	return (monitor);
 }
 
-void*	monitor_routine(void* arg)
+void	*monitor_routine(void *arg)
 {
 	t_philo	*philo;
 
-	philo = (t_philo*)arg;
+	philo = (t_philo *)arg;
 	while (1)
 	{
 		pthread_mutex_lock(&philo->shared->critical_region_mtx);
-		if (get_current_timestamp_in_ms() - philo->last_meal_timestamp >= philo->args.time_to_die)
+		if (get_current_timestamp_in_ms()
+			- philo->last_meal_timestamp >= philo->args.time_to_die)
 		{
 			pthread_mutex_unlock(&philo->shared->critical_region_mtx);
 			has_died(philo);

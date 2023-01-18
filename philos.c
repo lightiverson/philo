@@ -6,11 +6,11 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/18 11:52:06 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/18 12:15:16 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philos.h"
+#include "philos.h"
 
 t_philo	*philos_init(t_args args, t_shared *shared)
 {
@@ -23,7 +23,6 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
 		return (0);
 	}
-
 	i = 0;
 	while (i < args.n_of_philos)
 	{
@@ -31,7 +30,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		philos[i].args = args;
 		philos[i].last_meal_timestamp = 0;
 		philos[i].shared = shared;
-		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		if (pthread_mutex_init(&(philos[i].fork), 0))
 		{
 			free(shared);
 			free(philos);
@@ -50,7 +49,8 @@ int	philos_start(t_args args, t_philo *philos)
 	i = 0;
 	while (i < args.n_of_philos)
 	{
-		if (pthread_create(&(philos[i].thread), 0, philo_routine, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		if (pthread_create(&(philos[i].thread), 0,
+			philo_routine, (void *)&philos[i]))
 		{
 			free(philos[i].shared);
 			free(philos);
@@ -63,11 +63,11 @@ int	philos_start(t_args args, t_philo *philos)
 	return (1);
 }
 
-void*	philo_routine(void* arg)
+void	*philo_routine(void* arg)
 {
 	t_philo	*philo;
 	
-	philo = (t_philo*)arg;
+	philo = (t_philo *)arg;
 
 	// take_forks(p);
 	// put_forks(p);
