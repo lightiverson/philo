@@ -1,16 +1,18 @@
 NAME =		philo
 MAIN =		obj/main.o
-OBJECTS =	obj/state.o \
+OBJECTS =	obj/monitor.o \
+			obj/philos.o \
 			obj/state_cont.o \
+			obj/state.o \
 			obj/timestamp.o \
-			obj/validate.o \
-			obj/utils.o
-HEADERS =	philo.h \
-			structs.h \
-			validate.h \
+			obj/utils.o \
+			obj/validate.o
+HEADERS =	philos.h \
 			state.h \
+			structs.h \
 			timestamp.h \
-			utils.h
+			utils.h \
+			validate.h
 CFLAGS ?=	-Wall -Wextra -Werror
 LDFLAGS ?=
 
