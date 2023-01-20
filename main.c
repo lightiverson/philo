@@ -14,14 +14,39 @@ t_args	args_parse(int argc, const char *argv[5])
 	return (args);
 }
 
-t_shared *shared_init(void)
+pthread_mutex_t	*forks_init(t_args args)
+{
+	pthread_mutex_t	*forks;
+	int	i;
+
+	forks = ft_calloc(args.n_of_philos, sizeof(*forks));
+	if (!forks)
+	{
+		ft_putendl_fd("Error: calloc()", STDERR_FILENO);
+		return (0);
+	}
+	i = 0;
+	while (i < args.n_of_philos)
+	{
+		if (pthread_mutex_init(&forks[i], 0))
+		{
+			free(forks);
+			ft_putendl_fd("Error: mutex_init*(forks[i])", STDERR_FILENO);
+			return (0);
+		}
+		i++;
+	}
+	return (forks);
+}
+
+t_shared *shared_init(t_args args)
 {
 	t_shared	*shared;
 
-	shared = malloc(sizeof(*shared));
+	shared = ft_calloc(1, sizeof(*shared));
 	if (!shared)
 	{
-		ft_putendl_fd("Error: malloc()", STDERR_FILENO);
+		ft_putendl_fd("Error: ft_calloc()", STDERR_FILENO);
 		return (0);
 	}
 	shared->has_died = false;
@@ -37,6 +62,9 @@ t_shared *shared_init(void)
 		ft_putendl_fd("Error: pthread_mutex_init(has_died_mtx)", STDERR_FILENO);
 		return (0);
 	}
+	shared->forks = forks_init(args);
+	if (!shared->forks)
+		return (0);
 	return (shared);
 }
 
@@ -79,35 +107,35 @@ int	main (int argc, const char *argv[5])
 		return (EXIT_FAILURE);
 	}
 
-	shared = shared_init();
+	shared = shared_init(args);
 	if (!shared)
 	{
 		ft_putendl_fd("Error: shared_init()", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 
-	print_args_struct(args);
+	// print_args_struct(args);
 
-	philos = philos_init(args, shared);
-	if (!philos)
-	{
-		ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+	// philos = philos_init(args, shared);
+	// if (!philos)
+	// {
+	// 	ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
+	// 	return (EXIT_FAILURE);
+	// }
 
-	if (!philos_start(args, philos))
-	{
-		ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+	// if (!philos_start(args, philos))
+	// {
+	// 	ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
+	// 	return (EXIT_FAILURE);
+	// }
 
-	monitor(philos);
+	// monitor(philos);
 
-	if(!philos_join(args, philos))
-	{
-		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+	// if(!philos_join(args, philos))
+	// {
+	// 	ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
+	// 	return (EXIT_FAILURE);
+	// }
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/20 14:45:09 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/20 15:35:14 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	t_philo	*philos;
 	int		i;
 
-	philos = malloc(sizeof(*philos) * args.n_of_philos);
+	// philos = malloc(sizeof(*philos) * args.n_of_philos);
+	philos = ft_calloc(args.n_of_philos, sizeof(*philos));
 	if (!philos)
 	{
-		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
+		ft_putendl_fd("Error: ft_calloc() failed", STDERR_FILENO);
 		return (0);
 	}
 	i = 0;
@@ -37,13 +38,6 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 			return (0);
 		}
 		philos[i].shared = shared;
-		if (pthread_mutex_init(&(philos[i].fork), 0))
-		{
-			free(shared);
-			free(philos);
-			ft_putendl_fd("Error: pthread_mutex_init(fork)", STDERR_FILENO);
-			return (0);
-		}
 		i++;
 	}
 	return (philos);
@@ -57,7 +51,7 @@ int	philos_start(t_args args, t_philo *philos)
 	while (i < args.n_of_philos)
 	{
 		philos[i].args.start_time = get_current_timestamp_in_ms();
-		philos[i].last_meal_timestamp = get_current_timestamp_in_ms();
+		philos[i].last_meal_timestamp = philos[i].args.start_time;
 		if (pthread_create(&(philos[i].thread), 0,
 			philo_routine, (void *)&philos[i]))
 		{
