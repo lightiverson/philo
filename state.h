@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:45:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/17 17:25:42 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/19 12:15:04 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@
 # include "utils.h"
 
 /* state_cont.c */
+void	print_state(t_philo *philo, char *str);
+void	set_last_meal_timestamp(t_philo *philo);
+long	get_last_meal_timestamp(t_philo *philo);
 void	set_has_died_mutex(t_philo *philo);
 bool	get_has_died_mutex(t_philo	*philo);
 void	take_forks(t_philo *philo);
 void	put_forks(t_philo *philo);
-void	print_state(t_philo *philo, char *str);
 
 /* state.c */
 void	eat(t_philo *philo);

@@ -6,50 +6,31 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:53:20 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/18 12:05:14 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/19 17:34:06 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-pthread_t	*monitor_init_start(t_philo *philos)
+void	monitor(t_philo *philos)
 {
-	pthread_t	*monitor;
+	int		i;
+	int		n;
 
-	monitor = malloc(sizeof(*monitor));
-	if (!monitor)
-	{
-		free(philos->shared);
-		free(philos);
-		ft_putendl_fd("Error: malloc()", STDERR_FILENO);
-		return (0);
-	}
-	if (pthread_create(monitor, 0, monitor_routine, (void *)philos))
-	{
-		free(monitor);
-		free(philos->shared);
-		free(philos);
-		ft_putendl_fd("Error: creating monitor thread failed", STDERR_FILENO);
-		return (0);
-	}
-	return (monitor);
-}
-
-void	*monitor_routine(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
+	i = 0;
+	n = philos->args.n_of_philos;
 	while (1)
 	{
-		pthread_mutex_lock(&philo->shared->critical_region_mtx);
-		if (get_current_timestamp_in_ms()
-			- philo->last_meal_timestamp >= philo->args.time_to_die)
+		while (i < n)
 		{
-			pthread_mutex_unlock(&philo->shared->critical_region_mtx);
-			has_died(philo);
-			return (0);
+			if (get_current_timestamp_in_ms() - get_last_meal_timestamp(&philos[i]) > philos[i].args.time_to_die)
+			{
+				has_died(&philos[i]);
+				set_has_died_mutex(&philos[i]);
+				return ;
+			}
+			i++;
 		}
-		pthread_mutex_unlock(&philo->shared->critical_region_mtx);
+		i = 0;
 	}
 }

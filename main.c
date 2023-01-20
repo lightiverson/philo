@@ -25,39 +25,30 @@ t_shared *shared_init(void)
 		return (0);
 	}
 	shared->has_died = false;
-	if (pthread_mutex_init(&shared->critical_region_mtx, 0))
-	{
-		free(shared);
-		ft_putendl_fd("Error: pthread_mutex_init(critical_region_mtx)", STDERR_FILENO);
-		return (0);
-	}
 	if (pthread_mutex_init(&shared->output_mtx, 0))
 	{
 		free(shared);
 		ft_putendl_fd("Error: pthread_mutex_init(output_mtx)", STDERR_FILENO);
 		return (0);
 	}
+	if (pthread_mutex_init(&shared->has_died_mtx, 0))
+	{
+		free(shared);
+		ft_putendl_fd("Error: pthread_mutex_init(has_died_mtx)", STDERR_FILENO);
+		return (0);
+	}
 	return (shared);
 }
 
-int	philos_monitor_join(t_args args, pthread_t *monitor, t_philo *philos)
+int	philos_join(t_args args, t_philo *philos)
 {
 	int	i;
 
-	if (pthread_join(*monitor, 0))
-	{
-		free(monitor);
-		free(philos->shared);
-		free(philos);
-		ft_putendl_fd("Error: joining monitor failed", STDERR_FILENO);
-		return (0);
-	}
 	i = 0;
 	while (i < args.n_of_philos)
 	{
-		if (pthread_join(philos[i].thread, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		if (pthread_join(philos[i].thread, 0))
 		{
-			free(monitor);
 			free(philos->shared);
 			free(philos);
 			ft_putendl_fd("Error: joining philos failed", STDERR_FILENO);
@@ -73,7 +64,6 @@ int	main (int argc, const char *argv[5])
 	t_args		args;
 	t_philo		*philos;
 	t_shared	*shared;
-	pthread_t	*monitor;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -111,27 +101,13 @@ int	main (int argc, const char *argv[5])
 		return (EXIT_FAILURE);
 	}
 
-	monitor = monitor_init_start(philos);
-	if (!monitor)
-	{
-		ft_putendl_fd("Error: monitor_init_start()", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+	monitor(philos);
 
-	if(!philos_monitor_join(args, monitor, philos))
+	if(!philos_join(args, philos))
 	{
-		ft_putendl_fd("Error: philos_monitor_join()", STDERR_FILENO);
+		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-
-	if (!philos)
-	{
-		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
-	// print_philos(philos, args.n_of_philos);
 
 	return (0);
 }
-
-// Moet ik ook mutex gebruiken om stdout te locken?
