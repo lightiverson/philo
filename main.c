@@ -30,7 +30,6 @@ pthread_mutex_t	*forks_init(t_args args)
 	{
 		if (pthread_mutex_init(&forks[i], 0))
 		{
-			free(forks);
 			ft_putendl_fd("Error: mutex_init*(forks[i])", STDERR_FILENO);
 			return (0);
 		}
@@ -52,13 +51,11 @@ t_shared *shared_init(t_args args)
 	shared->has_died = false;
 	if (pthread_mutex_init(&shared->output_mtx, 0))
 	{
-		free(shared);
 		ft_putendl_fd("Error: pthread_mutex_init(output_mtx)", STDERR_FILENO);
 		return (0);
 	}
 	if (pthread_mutex_init(&shared->has_died_mtx, 0))
 	{
-		free(shared);
 		ft_putendl_fd("Error: pthread_mutex_init(has_died_mtx)", STDERR_FILENO);
 		return (0);
 	}
@@ -77,8 +74,6 @@ int	philos_join(t_args args, t_philo *philos)
 	{
 		if (pthread_join(philos[i].thread, 0))
 		{
-			free(philos->shared);
-			free(philos);
 			ft_putendl_fd("Error: joining philos failed", STDERR_FILENO);
 			return (0);
 		}

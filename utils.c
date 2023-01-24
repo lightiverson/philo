@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/24 10:25:32 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 14:29:35 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,18 @@ void	print_philos(t_philo	*philos, int n_of_philos)
 		print_philo_struct(&philos[i]);
 		i++;
 	}
+}
+
+int my_printf(t_philo *philo, const char *format, ...)
+{
+	int ret;
+	va_list args;
+
+	pthread_mutex_lock(&philo->shared->output_mtx);
+	va_start(args, format);
+	ret = vprintf(format, args);
+	va_end(args);
+	pthread_mutex_unlock(&philo->shared->output_mtx);
+
+	return ret;
 }
