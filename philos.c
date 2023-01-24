@@ -6,11 +6,43 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/20 15:35:14 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 12:06:40 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
+
+int my_printf(t_philo *philo, const char *format, ...)
+{
+	int ret;
+	va_list args;
+
+	pthread_mutex_lock(&philo->shared->output_mtx);
+	va_start(args, format);
+	ret = vprintf(format, args);
+	va_end(args);
+	pthread_mutex_unlock(&philo->shared->output_mtx);
+
+	return ret;
+}
+
+pthread_mutex_t	*left(t_philo *philo, int i)
+{
+	pthread_mutex_t *left;
+
+	left = &philo->shared->forks[i];
+	printf("Index of left fork is forks[%i]\n", i);
+	return (left);
+}
+
+pthread_mutex_t	*right(t_philo *philo, int i)
+{
+	pthread_mutex_t *right;
+
+	right = &philo->shared->forks[i + 1 % philo->args.n_of_philos];
+	printf("Index of right fork is forks[%i]\n", i + 1 % philo->args.n_of_philos);
+	return (right);
+}
 
 t_philo	*philos_init(t_args args, t_shared *shared)
 {
@@ -38,6 +70,8 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 			return (0);
 		}
 		philos[i].shared = shared;
+		philos[i].left_fork = left(&philos[i], i);
+		philos[i].left_fork = right(&philos[i], i);
 		i++;
 	}
 	return (philos);
@@ -70,16 +104,28 @@ void	*philo_routine(void* arg)
 	t_philo	*philo;
 	
 	philo = (t_philo *)arg;
-	if (!(philo->id % 2))
+	// if (!(philo->id % 2))
+	// {
+	// 	usleep(100);
+	// }
+	// while (!get_has_died_mutex(philo))
+	// {
+	// 	// take_forks(philo);
+	// 	eat(philo);
+	// 	// put_forks(philo);
+	// 	_sleep(philo);
+	// 	think(philo);
+	// }
+	while (1)
 	{
-		usleep(100);
-	}
-	while (!get_has_died_mutex(philo))
-	{
-		take_forks(philo);
+		if (get_has_died_mutex(philo))
+			break;
 		eat(philo);
-		put_forks(philo);
+		if (get_has_died_mutex(philo))
+			break;
 		_sleep(philo);
+		if (get_has_died_mutex(philo))
+			break;
 		think(philo);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/13 11:24:42 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 10:25:32 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_philo_struct(t_philo *philo)
 	printf("{\n");
 	printf("\tlast_meal = %ld\n", philo->last_meal_timestamp);
 	printf("\tid = %d\n", philo->id);
-	printf("\tfork = %p\n", &philo->fork);
+	// printf("\tfork = %p\n", &philo->fork);
 	printf("}\n");
 }
 

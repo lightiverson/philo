@@ -6,12 +6,13 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:53:20 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/19 17:34:06 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 12:08:15 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
+// verander arg set_has_died naar shared_data ipv philo
 void	monitor(t_philo *philos)
 {
 	int		i;

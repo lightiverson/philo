@@ -113,29 +113,28 @@ int	main (int argc, const char *argv[5])
 		ft_putendl_fd("Error: shared_init()", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
+	print_args_struct(args);
 
-	// print_args_struct(args);
+	philos = philos_init(args, shared);
+	if (!philos)
+	{
+		ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 
-	// philos = philos_init(args, shared);
-	// if (!philos)
-	// {
-	// 	ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
-	// 	return (EXIT_FAILURE);
-	// }
+	if (!philos_start(args, philos))
+	{
+		ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 
-	// if (!philos_start(args, philos))
-	// {
-	// 	ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
-	// 	return (EXIT_FAILURE);
-	// }
+	monitor(philos);
 
-	// monitor(philos);
-
-	// if(!philos_join(args, philos))
-	// {
-	// 	ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
-	// 	return (EXIT_FAILURE);
-	// }
+	if(!philos_join(args, philos))
+	{
+		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 
 	return (0);
 }

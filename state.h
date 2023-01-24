@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:45:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/19 12:15:04 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 10:25:49 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	set_last_meal_timestamp(t_philo *philo);
 long	get_last_meal_timestamp(t_philo *philo);
 void	set_has_died_mutex(t_philo *philo);
 bool	get_has_died_mutex(t_philo	*philo);
-void	take_forks(t_philo *philo);
-void	put_forks(t_philo *philo);
 
 /* state.c */
 void	eat(t_philo *philo);
