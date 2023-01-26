@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/19 16:56:01 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 16:19:58 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 void	monitor(t_philo *philos);
 
 /* philos.c */
-t_philo		*philos_init(t_args args, t_shared *shared);
-int			philos_start(t_args args, t_philo *philos);
-void		*philo_routine(void *arg);
+t_philo	*philos_init(t_args args, t_shared *shared);
+int		philos_start(t_args args, t_philo *philos);
+void	*philo_routine(void *arg);
 
 #endif

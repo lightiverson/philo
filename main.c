@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
+/*   Updated: 2023/01/24 16:17:39 by kgajadie      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philos.h"
 
 t_args	args_parse(int argc, const char *argv[5])
@@ -17,7 +29,7 @@ t_args	args_parse(int argc, const char *argv[5])
 pthread_mutex_t	*forks_init(t_args args)
 {
 	pthread_mutex_t	*forks;
-	int	i;
+	int				i;
 
 	forks = ft_calloc(args.n_of_philos, sizeof(*forks));
 	if (!forks)
@@ -38,7 +50,7 @@ pthread_mutex_t	*forks_init(t_args args)
 	return (forks);
 }
 
-t_shared *shared_init(t_args args)
+t_shared	*shared_init(t_args args)
 {
 	t_shared	*shared;
 
@@ -82,7 +94,7 @@ int	philos_join(t_args args, t_philo *philos)
 	return (1);
 }
 
-int	main (int argc, const char *argv[5])
+int	main(int argc, const char *argv[5])
 {
 	t_args		args;
 	t_philo		*philos;
@@ -125,7 +137,7 @@ int	main (int argc, const char *argv[5])
 
 	monitor(philos);
 
-	if(!philos_join(args, philos))
+	if (!philos_join(args, philos))
 	{
 		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
 		return (EXIT_FAILURE);

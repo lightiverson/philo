@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/24 12:01:10 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/24 16:24:57 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_shared
 	bool			has_died;
 	pthread_mutex_t	has_died_mtx;
 	pthread_mutex_t	output_mtx;
-	pthread_mutex_t	*forks; // moet ook gefreed worden
+	pthread_mutex_t	*forks;
 }	t_shared;
 
 typedef struct s_args

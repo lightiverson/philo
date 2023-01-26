@@ -6,23 +6,23 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/24 14:59:56 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/26 11:45:52 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-static pthread_mutex_t	*left(t_philo *philo, int i)
+pthread_mutex_t	*left(t_philo *philo, int i)
 {
-	pthread_mutex_t *left;
+	pthread_mutex_t	*left;
 
 	left = &philo->shared->forks[i];
 	return (left);
 }
 
-static pthread_mutex_t	*right(t_philo *philo, int i)
+pthread_mutex_t	*right(t_philo *philo, int i)
 {
-	pthread_mutex_t *right;
+	pthread_mutex_t	*right;
 
 	right = &philo->shared->forks[(i + 1) % philo->args.n_of_philos];
 	return (right);
@@ -60,7 +60,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 
 int	philos_start(t_args args, t_philo *philos)
 {
-	int	i;
+	int		i;
 	long	start_time;
 
 	i = 0;
@@ -70,7 +70,7 @@ int	philos_start(t_args args, t_philo *philos)
 		philos[i].args.start_time = start_time;
 		philos[i].last_meal_timestamp = start_time;
 		if (pthread_create(&(philos[i].thread), 0,
-			philo_routine, (void *)&philos[i]))
+				philo_routine, (void *)&philos[i]))
 		{
 			ft_putendl_fd("Error: pthread_create(thread)", STDERR_FILENO);
 			return (0);
@@ -80,25 +80,27 @@ int	philos_start(t_args args, t_philo *philos)
 	return (1);
 }
 
-void	*philo_routine(void* arg)
+void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)arg;
 	if (!(philo->id % 2))
 	{
-		usleep(100);
+		better_sleep(philo->args.time_to_eat);
 	}
 	while (1)
 	{
 		if (get_has_died_mutex(philo->shared))
-			break;
+			break ;
+		take_forks(philo);
 		eat(philo);
+		put_forks(philo);
 		if (get_has_died_mutex(philo->shared))
-			break;
+			break ;
 		_sleep(philo);
 		if (get_has_died_mutex(philo->shared))
-			break;
+			break ;
 		think(philo);
 	}
 	return (0);
