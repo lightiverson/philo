@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/27 14:57:30 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/27 15:41:47 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ int	philos_join(t_args args, t_philo *philos)
 	return (1);
 }
 
+int	log_and_exit(char *str)
+{
+	ft_putendl_fd(str, STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
 int	main(int argc, const char *argv[5])
 {
 	t_args		args;
@@ -50,25 +56,17 @@ int	main(int argc, const char *argv[5])
 	t_shared	*shared;
 
 	if (argc < 5 || argc > 6)
-	{
-		ft_putendl_fd("Error: incorrect amount of args", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (log_and_exit("Error: incorrect amount of args"));
+
 	are_cla_valid(++argv);
 
 	args = args_parse(argc, argv);
 	if (!are_philo_mem_pos(args))
-	{
-		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (log_and_exit("Error: args are not postive numbers"));
 
 	shared = shared_init(args);
 	if (!shared)
-	{
-		ft_putendl_fd("Error: shared_init()", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (log_and_exit("Error: shared_init()"));
 
 	if (forks_init(shared->forks, args.n_of_philos))
 	{
@@ -83,8 +81,12 @@ int	main(int argc, const char *argv[5])
 	if (!philos)
 	{
 		ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
 		return (EXIT_FAILURE);
 	}
+
+	// lastmealTimestampmtxs int + error handeling
 
 	if (!philos_start(args, philos))
 	{
