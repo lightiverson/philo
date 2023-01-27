@@ -2,12 +2,14 @@ NAME =		philo
 MAIN =		obj/main.o
 OBJECTS =	obj/monitor.o \
 			obj/philos.o \
+			obj/shared.o \
 			obj/state_cont.o \
 			obj/state.o \
 			obj/timestamp.o \
 			obj/utils.o \
 			obj/validate.o
 HEADERS =	philos.h \
+			shared.h \
 			state.h \
 			structs.h \
 			timestamp.h \

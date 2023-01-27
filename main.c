@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/24 16:17:39 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/27 14:57:30 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,57 +24,6 @@ t_args	args_parse(int argc, const char *argv[5])
 	if (argc == 6)
 		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
-}
-
-pthread_mutex_t	*forks_init(t_args args)
-{
-	pthread_mutex_t	*forks;
-	int				i;
-
-	forks = ft_calloc(args.n_of_philos, sizeof(*forks));
-	if (!forks)
-	{
-		ft_putendl_fd("Error: calloc()", STDERR_FILENO);
-		return (0);
-	}
-	i = 0;
-	while (i < args.n_of_philos)
-	{
-		if (pthread_mutex_init(&forks[i], 0))
-		{
-			ft_putendl_fd("Error: mutex_init*(forks[i])", STDERR_FILENO);
-			return (0);
-		}
-		i++;
-	}
-	return (forks);
-}
-
-t_shared	*shared_init(t_args args)
-{
-	t_shared	*shared;
-
-	shared = ft_calloc(1, sizeof(*shared));
-	if (!shared)
-	{
-		ft_putendl_fd("Error: ft_calloc()", STDERR_FILENO);
-		return (0);
-	}
-	shared->has_died = false;
-	if (pthread_mutex_init(&shared->output_mtx, 0))
-	{
-		ft_putendl_fd("Error: pthread_mutex_init(output_mtx)", STDERR_FILENO);
-		return (0);
-	}
-	if (pthread_mutex_init(&shared->has_died_mtx, 0))
-	{
-		ft_putendl_fd("Error: pthread_mutex_init(has_died_mtx)", STDERR_FILENO);
-		return (0);
-	}
-	shared->forks = forks_init(args);
-	if (!shared->forks)
-		return (0);
-	return (shared);
 }
 
 int	philos_join(t_args args, t_philo *philos)
@@ -120,6 +69,14 @@ int	main(int argc, const char *argv[5])
 		ft_putendl_fd("Error: shared_init()", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
+
+	if (forks_init(shared->forks, args.n_of_philos))
+	{
+		shared_destroy(shared);
+		ft_putendl_fd("Error: forks_init()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+
 	print_args_struct(args);
 
 	philos = philos_init(args, shared);
