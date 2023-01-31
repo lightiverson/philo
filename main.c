@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/31 16:12:09 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 17:20:05 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int	main(int argc, const char *argv[5])
 	if (!philos_start(args, philos))
 	{
 		ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
+		// voeg error management en cleanup toe
 		return (EXIT_FAILURE);
 	}
 
@@ -135,8 +136,12 @@ int	main(int argc, const char *argv[5])
 	if (philos_join(args, philos))
 	{
 		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
+		// voeg error management en cleanup toe
 		return (EXIT_FAILURE);
 	}
 
+	philos_destroy(philos, args.n_of_philos);
+	forks_destroy(shared->forks, args.n_of_philos);
+	shared_destroy(shared);
 	return (0);
 }
