@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo.h                                            :+:    :+:            */
+/*   setter_getter.h                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 18:20:41 by kawish        ########   odam.nl         */
+/*   Created: 2023/01/31 16:05:56 by kgajadie      #+#    #+#                 */
+/*   Updated: 2023/01/31 16:18:38 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef SETTER_GETTER_H
+# define SETTER_GETTER_H
 
 /* Private libraries */
 # include "structs.h"
-# include "state.h"
 # include "timestamp.h"
-# include "libft/libft.h"
-# include "validate.h"
-# include "utils.h"
 
-/* Public libraries */
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
+/* setter_getter.h */
+void	set_has_died(t_shared *shared);
+bool	get_has_died(t_shared *shared);
+long	get_last_meal_timestamp(t_philo *philo);
+void	set_last_meal_timestamp(t_philo *philo);
 
 #endif

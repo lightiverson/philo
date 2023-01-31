@@ -6,83 +6,49 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/30 17:10:59 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/31 16:00:04 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "state.h"
 
-void	think(t_philo *philo)
+void	print_state(t_philo *philo, char *str)
 {
-	printf("%ld\t%d\tis thinking\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-}
-
-void	_sleep(t_philo *philo)
-{
-	printf("%ld\t%d\tis sleeping\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-	usleep(philo->args->time_to_sleep * 1000);
-}
-
-void	has_died(int i)
-{
-	printf("%ld\t%d\tdied\n", get_current_timestamp_in_ms(), i);
-}
-
-void take_forks(t_philo *philo)
-{
-	int		i_philo;
-	int		i_philo_right;
-	t_philo	*arr_start;
-	t_philo	*philo_right;
-
-	i_philo = philo->id - 1;
-	i_philo_right = (i_philo + 1) % philo->args->n_of_philos;
-	arr_start = philo - i_philo;
-	philo_right = &arr_start[i_philo_right];
-
-	printf("%ld\t%d\tis trying to take forks\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-
-	// Pick up left fork
-	pthread_mutex_lock(&philo->fork);
-	// Pick up right fork
-	pthread_mutex_lock(&philo_right->fork);
+	pthread_mutex_lock(&philo->shared->output_mtx);
+	if (!get_has_died(philo->shared))
+		printf("%ld\t%d\t%s\n", get_current_timestamp_in_ms()
+			- philo->args.start_time, philo->id, str);
+	else if (!ft_strncmp(str, "died", 5))
+		printf("%ld\t%d\t%s\n", get_current_timestamp_in_ms()
+			- philo->args.start_time, philo->id, str);
+	pthread_mutex_unlock(&philo->shared->output_mtx);
 }
 
 void	eat(t_philo *philo)
 {
-	printf("%ld\t%d\tis eating\n", get_current_timestamp_in_ms() - philo->args->start_time, philo->id);
-	usleep(philo->args->time_to_eat * 1000);
+	set_last_meal_timestamp(philo);
+	print_state(philo, "is eating");
+	better_sleep(philo->args.time_to_eat);
 }
 
-void put_forks(t_philo *philo)
+/*
+Voeg check toe of philo dood zal gaan
+in z'n slaap. Zo ja slaap tot dan en set_has_died()
+Betekend dit niet dat deze check in de monitor moet?
+De monitor is de enige die set_has_died() kan callen
+*/
+void	_sleep(t_philo *philo)
 {
-	int		i_philo;
-	int		i_philo_right;
-	t_philo	*arr_start;
-	t_philo	*philo_right;
-
-	i_philo = philo->id - 1;
-	i_philo_right = (i_philo + 1) % philo->args->n_of_philos;
-	arr_start = philo - i_philo;
-	philo_right = &arr_start[i_philo_right];
-
-	// Put down right fork
-	pthread_mutex_unlock(&philo_right->fork);
-	// Put down left fork
-	pthread_mutex_unlock(&philo->fork);
+	print_state(philo, "is sleeping");
+	better_sleep(philo->args.time_to_sleep);
 }
 
-void*	philosophize(void* arg)
+void	think(t_philo *philo)
 {
-	t_philo	*p;
-	
-	p = (t_philo*)arg;
+	print_state(philo, "is thinking");
+}
 
-	take_forks(p);
-	eat(p);
-	put_forks(p);
-	_sleep(p);
-	think(p);
-
-	return (0);
+void	has_died(t_philo *philo)
+{
+	print_state(philo, "died");
 }

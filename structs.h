@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/29 21:34:58 by kawish        ########   odam.nl         */
+/*   Updated: 2023/01/31 16:01:50 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,34 @@
 /* Public libraries */
 # include <stdbool.h>
 # include <pthread.h>
-/* Private libraries */
 
-/*
-Dit kan je ook gebruiken om state bij te houden
-typedef struct s_state
+typedef struct s_shared
 {
-	bool	thinking
-	bool	hungry
-	bool	eating
-	bool	sleeping
-	bool	is_alive
-}	t_state;
-*/
-
-enum e_state {
-	THINKING = 0,
-	HUNGRY = 1,
-	EATING = 2,
-	SLEEPING = 3,
-};
+	bool			has_died;
+	pthread_mutex_t	has_died_mtx;
+	pthread_mutex_t	output_mtx;
+	pthread_mutex_t	*forks;
+}	t_shared;
 
 typedef struct s_args
 {
-	int	n_of_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	number_of_times_to_eat;
-	long int start_time;
+	int			n_of_philos;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			number_of_times_to_eat;
+	long int	start_time;
 }	t_args;
 
 typedef struct s_philo
 {
 	int				id;
-	int				state;
-	bool			is_alive;
-	t_args			*args;
-	pthread_mutex_t	fork;
+	t_args			args;
+	long			last_meal;
+	pthread_mutex_t	last_meal_mtx;
+	t_shared		*shared;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	pthread_t		thread;
 }	t_philo;
 

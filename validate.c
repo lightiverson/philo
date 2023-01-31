@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:17:49 by kgajadie      #+#    #+#                 */
-/*   Updated: 2022/12/22 16:38:09 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/10 16:09:20 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ static bool	is_pos(int philo_mem)
 	return (true);
 }
 
-bool	are_philo_mem_pos(t_args *args)
+bool	are_philo_mem_pos(t_args args)
 {
 	return (
-		is_pos(args->n_of_philos)
-		&& is_pos(args->time_to_die)
-		&& is_pos(args->time_to_eat)
-		&& is_pos(args->time_to_sleep)
-		&& is_pos(args->number_of_times_to_eat)
+		is_pos(args.n_of_philos)
+		&& is_pos(args.time_to_die)
+		&& is_pos(args.time_to_eat)
+		&& is_pos(args.time_to_sleep)
+		&& is_pos(args.number_of_times_to_eat)
 	);
 }

@@ -1,7 +1,19 @@
-#include "philo.h"
-// Moet ik ook mutex gebruiken om stdout te locken?
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
+/*   Updated: 2023/01/31 16:12:09 by kgajadie      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_args	parse_args(int argc, const char *argv[5])
+#include "philos.h"
+#include "setter_getter.h"
+
+t_args	args_parse(int argc, const char *argv[5])
 {
 	t_args	args;
 
@@ -9,92 +21,122 @@ t_args	parse_args(int argc, const char *argv[5])
 	args.time_to_die = ft_atoi(argv[1]);
 	args.time_to_eat = ft_atoi(argv[2]);
 	args.time_to_sleep = ft_atoi(argv[3]);
-	args.number_of_times_to_eat = -1;
+	args.number_of_times_to_eat = 1;
 	if (argc == 6)
 		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
 }
 
-t_philo	*philos_init(t_args *args)
+void	monitor(t_philo *philos)
 {
 	int		i;
-	t_philo	*philos;
-
-	philos = malloc(sizeof(*philos) * args->n_of_philos);
-	if (!philos)
-	{
-		ft_putendl_fd("Error: malloc() failed", STDERR_FILENO);
-		return (0);
-	}
+	int		n;
 
 	i = 0;
-	while (i < args->n_of_philos)
+	n = philos->args.n_of_philos;
+	while (1)
 	{
-		philos[i].id = i + 1;
-		philos[i].state = THINKING; // wat is een philo zn oorspronkelijke staat? Thinking?
-		philos[i].is_alive = true;
-		philos[i].args = args;
-		if (pthread_mutex_init(&(philos[i].fork), 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
+		while (i < n)
 		{
-			ft_putendl_fd("Error: initializing mutex failed", STDERR_FILENO);
-			return (0);
+			if (get_current_timestamp_in_ms()
+				- get_last_meal_timestamp(&philos[i])
+				> philos[i].args.time_to_die)
+			{
+				set_has_died(philos->shared);
+				has_died(&philos[i]);
+				return ;
+			}
+			i++;
 		}
-		i++;
+		i = 0;
 	}
-
-	i = 0;
-	args->start_time = get_current_timestamp_in_ms();
-	while (i < args->n_of_philos)
-	{
-		if (pthread_create(&(philos[i].thread), 0, philosophize, (void*)&philos[i])) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
-		{
-			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
-			return (0);
-		}
-		i++;
-	}
-
-	i = 0;
-	while (i < args->n_of_philos)
-	{
-		if (pthread_join(philos[i].thread, 0)) // If successful, pthread_mutex_init() will return zero and put the new mutex id into mutex, otherwise an error number will be returned to indicate the error.
-		{
-			ft_putendl_fd("Error: creating threads failed", STDERR_FILENO);
-			return (0);
-		}
-		i++;
-	}
-
-	return (philos);
 }
 
-int main (int argc, const char *argv[5])
+void	*philo_routine(void *arg)
 {
-	t_args	args; // Moet sowieso op stack mem blijven.
-	t_philo	*philos;
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	if (!(philo->id % 2))
+	{
+		better_sleep(philo->args.time_to_eat);
+	}
+	while (1)
+	{
+		if (get_has_died(philo->shared))
+			break ;
+		take_forks(philo);
+		eat(philo);
+		put_forks(philo);
+		if (get_has_died(philo->shared))
+			break ;
+		_sleep(philo);
+		if (get_has_died(philo->shared))
+			break ;
+		think(philo);
+	}
+	return (0);
+}
+
+int	main(int argc, const char *argv[5])
+{
+	t_args		args;
+	t_philo		*philos;
+	t_shared	*shared;
 
 	if (argc < 5 || argc > 6)
-	{
-		ft_putendl_fd("Error: incorrect amount of args", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (log_and_exit("Error: incorrect amount of args"));
+
 	are_cla_valid(++argv);
 
-	args = parse_args(argc, argv);
-	if (!are_philo_mem_pos(&args))
+	args = args_parse(argc, argv);
+	if (!are_philo_mem_pos(args))
+		return (log_and_exit("Error: args are not postive numbers"));
+
+	shared = shared_init(args);
+	if (!shared)
+		return (log_and_exit("Error: shared_init()"));
+
+	if (forks_init(shared->forks, args.n_of_philos))
 	{
-		ft_putendl_fd("Error: args are not postive numbers", STDERR_FILENO);
+		ft_putendl_fd("Error: forks_init()", STDERR_FILENO);
+		shared_destroy(shared);
 		return (EXIT_FAILURE);
 	}
-	print_args_struct(&args);
 
-	philos = philos_init(&args);
+	print_args_struct(args);
+
+	philos = philos_init(args, shared);
 	if (!philos)
 	{
-		ft_putendl_fd("Error: initializing philos failed", STDERR_FILENO);
+		ft_putendl_fd("Error: philos_init()", STDERR_FILENO);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
 		return (EXIT_FAILURE);
 	}
-	// print_philos(philos, args.n_of_philos);
+
+	if (last_meal_mtx_init(philos, args.n_of_philos))
+	{
+		ft_putendl_fd("Error: last_meal_mtx_init()", STDERR_FILENO);
+		philos_destroy(philos, args.n_of_philos);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
+		return (EXIT_FAILURE);
+	}
+
+	if (!philos_start(args, philos))
+	{
+		ft_putendl_fd("Error: philos_start()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+
+	monitor(philos);
+
+	if (philos_join(args, philos))
+	{
+		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 
 	return (0);
 }
