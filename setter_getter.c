@@ -1,55 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   monitor.c                                          :+:    :+:            */
+/*   setter_getter.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:53:20 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/27 15:04:37 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 15:57:15 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philos.h"
+#include "setter_getter.h"
 
-void	set_has_died_mutex(t_shared *shared)
+void	set_has_died(t_shared *shared)
 {
 	pthread_mutex_lock(&shared->has_died_mtx);
 	shared->has_died = true;
 	pthread_mutex_unlock(&shared->has_died_mtx);
 }
 
-long	get_last_meal_timestamp(t_philo *philo)
+bool	get_has_died(t_shared *shared)
 {
-	long	last_meal_timestamp;
+	bool	has_died;
 
-	pthread_mutex_lock(&philo->last_meal_timestamp_mtx);
-	last_meal_timestamp = philo->last_meal_timestamp;
-	pthread_mutex_unlock(&philo->last_meal_timestamp_mtx);
-	return (last_meal_timestamp);
+	pthread_mutex_lock(&shared->has_died_mtx);
+	has_died = shared->has_died;
+	pthread_mutex_unlock(&shared->has_died_mtx);
+	return (has_died);
 }
 
-void	monitor(t_philo *philos)
+long	get_last_meal_timestamp(t_philo *philo)
 {
-	int		i;
-	int		n;
+	long	last_meal;
 
-	i = 0;
-	n = philos->args.n_of_philos;
-	while (1)
-	{
-		while (i < n)
-		{
-			if (get_current_timestamp_in_ms()
-				- get_last_meal_timestamp(&philos[i])
-				> philos[i].args.time_to_die)
-			{
-				set_has_died_mutex(philos->shared);
-				has_died(&philos[i]);
-				return ;
-			}
-			i++;
-		}
-		i = 0;
-	}
+	pthread_mutex_lock(&philo->last_meal_mtx);
+	last_meal = philo->last_meal;
+	pthread_mutex_unlock(&philo->last_meal_mtx);
+	return (last_meal);
+}
+
+void	set_last_meal_timestamp(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->last_meal_mtx);
+	philo->last_meal = get_current_timestamp_in_ms();
+	pthread_mutex_unlock(&philo->last_meal_mtx);
 }

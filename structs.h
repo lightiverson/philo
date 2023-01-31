@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/26 16:47:03 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 16:01:50 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 /* Public libraries */
 # include <stdbool.h>
 # include <pthread.h>
-
-/* Private libraries */
 
 typedef struct s_shared
 {
@@ -41,8 +39,8 @@ typedef struct s_philo
 {
 	int				id;
 	t_args			args;
-	long			last_meal_timestamp;
-	pthread_mutex_t	last_meal_timestamp_mtx;
+	long			last_meal;
+	pthread_mutex_t	last_meal_mtx;
 	t_shared		*shared;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;

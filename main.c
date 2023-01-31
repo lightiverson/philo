@@ -6,11 +6,12 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/27 15:41:47 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 16:12:09 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
+#include "setter_getter.h"
 
 t_args	args_parse(int argc, const char *argv[5])
 {
@@ -26,27 +27,55 @@ t_args	args_parse(int argc, const char *argv[5])
 	return (args);
 }
 
-int	philos_join(t_args args, t_philo *philos)
+void	monitor(t_philo *philos)
 {
-	int	i;
+	int		i;
+	int		n;
 
 	i = 0;
-	while (i < args.n_of_philos)
+	n = philos->args.n_of_philos;
+	while (1)
 	{
-		if (pthread_join(philos[i].thread, 0))
+		while (i < n)
 		{
-			ft_putendl_fd("Error: joining philos failed", STDERR_FILENO);
-			return (0);
+			if (get_current_timestamp_in_ms()
+				- get_last_meal_timestamp(&philos[i])
+				> philos[i].args.time_to_die)
+			{
+				set_has_died(philos->shared);
+				has_died(&philos[i]);
+				return ;
+			}
+			i++;
 		}
-		i++;
+		i = 0;
 	}
-	return (1);
 }
 
-int	log_and_exit(char *str)
+void	*philo_routine(void *arg)
 {
-	ft_putendl_fd(str, STDERR_FILENO);
-	return (EXIT_FAILURE);
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	if (!(philo->id % 2))
+	{
+		better_sleep(philo->args.time_to_eat);
+	}
+	while (1)
+	{
+		if (get_has_died(philo->shared))
+			break ;
+		take_forks(philo);
+		eat(philo);
+		put_forks(philo);
+		if (get_has_died(philo->shared))
+			break ;
+		_sleep(philo);
+		if (get_has_died(philo->shared))
+			break ;
+		think(philo);
+	}
+	return (0);
 }
 
 int	main(int argc, const char *argv[5])
@@ -70,8 +99,8 @@ int	main(int argc, const char *argv[5])
 
 	if (forks_init(shared->forks, args.n_of_philos))
 	{
-		shared_destroy(shared);
 		ft_putendl_fd("Error: forks_init()", STDERR_FILENO);
+		shared_destroy(shared);
 		return (EXIT_FAILURE);
 	}
 
@@ -86,7 +115,14 @@ int	main(int argc, const char *argv[5])
 		return (EXIT_FAILURE);
 	}
 
-	// lastmealTimestampmtxs int + error handeling
+	if (last_meal_mtx_init(philos, args.n_of_philos))
+	{
+		ft_putendl_fd("Error: last_meal_mtx_init()", STDERR_FILENO);
+		philos_destroy(philos, args.n_of_philos);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
+		return (EXIT_FAILURE);
+	}
 
 	if (!philos_start(args, philos))
 	{
@@ -96,7 +132,7 @@ int	main(int argc, const char *argv[5])
 
 	monitor(philos);
 
-	if (!philos_join(args, philos))
+	if (philos_join(args, philos))
 	{
 		ft_putendl_fd("Error: philos_join()", STDERR_FILENO);
 		return (EXIT_FAILURE);

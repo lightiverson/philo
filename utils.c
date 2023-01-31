@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/24 16:24:17 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 15:55:10 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_philo_struct(t_philo *philo)
 	printf("t_philo philo\n");
 	printf("{\n");
 	printf("\tid = %d\n", philo->id);
-	printf("\tlast_meal = %ld\n", philo->last_meal_timestamp);
+	printf("\tlast_meal = %ld\n", philo->last_meal);
 	printf("}\n");
 }
 
@@ -57,4 +57,10 @@ int	my_printf(t_philo *philo, const char *format, ...)
 	va_end(args);
 	pthread_mutex_unlock(&philo->shared->output_mtx);
 	return (ret);
+}
+
+int	log_and_exit(char *str)
+{
+	ft_putendl_fd(str, STDERR_FILENO);
+	return (EXIT_FAILURE);
 }
