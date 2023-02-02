@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/31 15:55:10 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 12:02:34 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ int	my_printf(t_philo *philo, const char *format, ...)
 	return (ret);
 }
 
-int	log_and_exit(char *str)
+int	destroy(t_philo *philos, t_args args, t_shared *shared)
 {
-	ft_putendl_fd(str, STDERR_FILENO);
-	return (EXIT_FAILURE);
+	philos_destroy(philos, args.n_of_philos);
+	forks_destroy(shared->forks, args.n_of_philos);
+	shared_destroy(shared);
+	return (EXIT_SUCCESS);
 }

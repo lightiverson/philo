@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 11:37:48 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 12:01:01 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,13 @@ int	error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 
 	n = philos->args.n_of_philos;
 	ft_putendl_fd(err_msg, STDERR_FILENO);
-	if (lv > 2)
+	if (lv >= 3)
 		philos_destroy(philos, n);
-	if (lv > 1)
+	if (lv >= 2)
 		forks_destroy(shared->forks, n);
-	if (lv > 0)
+	if (lv >= 1)
 		shared_destroy(shared);
-	return (EXIT_FAILURE);
-}
-
-int	destroy(t_philo *philos, t_args args, t_shared *shared)
-{
-	philos_destroy(philos, args.n_of_philos);
-	forks_destroy(shared->forks, args.n_of_philos);
-	shared_destroy(shared);
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
 int	main(int argc, const char *argv[5])
@@ -108,11 +100,13 @@ int	main(int argc, const char *argv[5])
 	t_shared	*shared;
 
 	if (argc < 5 || argc > 6)
-		return (error_handle("Error: incorrect amount of args", 0, shared, philos));
+		return (error_handle("Error: incorrect amount of args",
+				0, shared, philos));
 	are_cla_valid(++argv);
 	args = args_parse(argc, argv);
 	if (!are_philo_mem_pos(args))
-		return (error_handle("Error: args are not postive numbers", 0, shared, philos));
+		return (error_handle("Error: args are not postive numbers",
+				0, shared, philos));
 	shared = shared_init(args);
 	if (!shared)
 		return (error_handle("Error: shared_init()", 0, shared, philos));

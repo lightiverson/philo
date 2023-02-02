@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:52:02 by kawish        #+#    #+#                 */
-/*   Updated: 2023/01/31 16:19:25 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 12:00:47 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ void	print_args_struct(t_args args);
 void	print_philo_struct(t_philo *philo);
 void	print_philos(t_philo	*philos, int n_of_philos);
 int		my_printf(t_philo *philo, const char *format, ...);
-int		log_and_exit(char *str);
+int		destroy(t_philo *philos, t_args args, t_shared *shared);
 
 #endif
