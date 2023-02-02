@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 10:43:08 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 11:37:48 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,9 @@ int	main(int argc, const char *argv[5])
 	shared = shared_init(args);
 	if (!shared)
 		return (error_handle("Error: shared_init()", 0, shared, philos));
-	if (forks_init(shared->forks, args.n_of_philos))
-		return (error_handle("Error: forks_init()", 1, shared, philos));
 	philos = philos_init(args, shared);
 	if (!philos)
-		return (error_handle("Error: philos_init()", 2, shared, philos));
-	if (last_meal_mtx_init(philos, args.n_of_philos))
-		return (error_handle("Error: last_meal_mtx_init()", 3, shared, philos));
+		return (error_handle("Error: philos_init()", 0, shared, philos));
 	if (philos_start(args, philos))
 		return (error_handle("Error: philos_start()", 3, shared, philos));
 	monitor(philos);

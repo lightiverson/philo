@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/31 17:25:02 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 11:44:20 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	if (!philos)
 	{
 		ft_putendl_fd("Error: ft_calloc() failed", STDERR_FILENO);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
 		return (0);
 	}
 	i = 0;
@@ -33,6 +35,14 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		philos[i].left_fork = left(&philos[i], i);
 		philos[i].right_fork = right(&philos[i], i);
 		i++;
+	}
+	if (last_meal_mtx_init(philos, args.n_of_philos))
+	{
+		ft_putendl_fd("Error: last_meal_mtx_init()", STDERR_FILENO);
+		philos_destroy(philos, args.n_of_philos);
+		forks_destroy(shared->forks, args.n_of_philos);
+		shared_destroy(shared);
+		return (0);
 	}
 	return (philos);
 }

@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/27 11:07:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/27 14:58:46 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 11:21:22 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,18 @@ t_shared	*shared_init(t_args args)
 	shared->forks = ft_calloc(args.n_of_philos, sizeof(*shared->forks));
 	if (!shared->forks)
 	{
-		free(shared);
 		ft_putendl_fd("Error: calloc()", STDERR_FILENO);
+		free(shared);
 		return (0);
 	}
 	shared->has_died = false;
+	if (forks_init(shared->forks, args.n_of_philos))
+	{
+		ft_putendl_fd("Error: forks_init()", STDERR_FILENO);
+		free(shared->forks);
+		free(shared);
+		return (0);
+	}
 	return (shared);
 }
 
