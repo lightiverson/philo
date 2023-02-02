@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/02/02 18:54:01 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 19:25:03 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	destroy(t_philo *philos, t_args args, t_shared *shared)
 	pthread_mutex_destroy(&shared->has_died_mtx);
 	pthread_mutex_destroy(&shared->output_mtx);
 	shared_forks_destroy(shared->forks, args.n_of_philos);
+	free(shared->forks);
 	free(shared);
 	return (0);
 }

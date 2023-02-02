@@ -42,7 +42,28 @@ fclean : clean
 
 re : fclean all
 
-docker-pwd:
-	docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -it --rm --init -v "$$PWD:/pwd"  ubuntu-philo sh -c "cd /pwd; bash"
+docker-pwd-thread:
+	docker run \
+	-it \
+	--rm \
+	--init \
+	-v "$$PWD:/pwd" \
+	--cap-add=SYS_PTRACE \
+	--security-opt seccomp=unconfined \
+	-e CFLAGS="-Wall -Wextra -fsanitize=thread -g -O1" \
+	-e LDFLAGS="-fsanitize=thread -g -O1" \
+	ubuntu-philo sh -c "cd /pwd; bash"
+
+docker-pwd-leak:
+	docker run \
+	-it \
+	--rm \
+	--init \
+	-v "$$PWD:/pwd" \
+	--cap-add=SYS_PTRACE \
+	--security-opt seccomp=unconfined \
+	-e CFLAGS="-Wall -Wextra -fsanitize=leak -g" \
+	-e LDFLAGS="-fsanitize=leak -g" \
+	ubuntu-philo sh -c "cd /pwd; bash"
 
 .PHONY : all clean fclean re libft

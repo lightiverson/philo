@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 18:54:24 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 19:29:07 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 	if (lv >= 2)
 		shared_forks_destroy(shared->forks, n);
 	if (lv >= 1)
+	{
+		free(shared->forks);
 		free(shared);
+	}
 	return (0);
 }
 
@@ -110,13 +113,11 @@ int	main(int argc, const char *argv[5])
 	philos = 0;
 	shared = 0;
 	if (argc < 5 || argc > 6)
-		return ((int)error_handle("Error: incorrect amount of args",
-				0, shared, philos));
+		return ((int)error_handle("Error: arg count", 0, shared, philos));
 	are_cla_valid(++argv);
 	args = args_parse(argc, argv);
 	if (!are_philo_mem_pos(args))
-		return ((int)error_handle("Error: args are not postive numbers",
-				0, shared, philos));
+		return ((int)error_handle("Error: non pos args", 0, shared, philos));
 	shared = shared_init(args);
 	if (!shared)
 		return ((int)error_handle("Error: shared_init()", 0, shared, philos));

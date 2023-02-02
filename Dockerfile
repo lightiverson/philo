@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-ENV CC=clang CFLAGS="-Wall -Wextra -fsanitize=thread -g -O1" LDFLAGS="-fsanitize=thread -g -O1"
+ENV CC=clang
 
 RUN apt-get update && \
     apt-get install vim \
@@ -8,8 +8,6 @@ RUN apt-get update && \
     make \
     clang \
     valgrind \
-    libreadline-dev \
-    strace \
     lldb \
     -y && \
     apt-get clean && \
