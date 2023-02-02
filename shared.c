@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/27 11:07:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 15:07:46 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 18:54:34 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,5 @@ int	shared_forks_destroy(pthread_mutex_t *forks, int n_init_forks)
 		}
 		i++;
 	}
-	return (0);
-}
-
-int	shared_free(t_shared *shared)
-{
-	free(shared);
 	return (0);
 }

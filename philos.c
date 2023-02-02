@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 15:17:52 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 18:37:22 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,8 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		i++;
 	}
 	if (philos_last_meal_mtx_init(philos, args.n_of_philos))
-		return (error_handle("Error: philos_last_meal_mtx_init()",
-				5, shared, philos));
+		return (error_handle("Error: philos_last_meal_mtx_init()", 5, shared, philos));
 	return (philos);
-}
-
-int	philos_free(t_philo *philos, int n_of_philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < n_of_philos)
-	{
-		free(&philos[i]);
-		i++;
-	}
-	free(philos);
-	return (0);
 }
 
 int	philos_start(t_args args, t_philo *philos)

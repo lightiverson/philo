@@ -1,6 +1,6 @@
 NAME =		philo
 MAIN =		obj/main.o
-OBJECTS =	obj/last_meal.o \
+OBJECTS =	obj/philos_last_meal.o \
 			obj/philos.o \
 			obj/setter_getter.o \
 			obj/shared.o \

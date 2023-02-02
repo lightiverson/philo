@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/02/02 13:00:55 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 18:54:01 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ int	my_printf(t_philo *philo, const char *format, ...)
 int	destroy(t_philo *philos, t_args args, t_shared *shared)
 {
 	philos_last_meal_mtx_destroy(philos, args.n_of_philos);
-	philos_free(philos, args.n_of_philos);
+	free(philos);
 	pthread_mutex_destroy(&shared->has_died_mtx);
 	pthread_mutex_destroy(&shared->output_mtx);
 	shared_forks_destroy(shared->forks, args.n_of_philos);
-	shared_free(shared);
+	free(shared);
 	return (0);
 }
