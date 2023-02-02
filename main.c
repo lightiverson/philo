@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 12:01:01 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 15:17:36 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,18 @@ int	error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 
 	n = philos->args.n_of_philos;
 	ft_putendl_fd(err_msg, STDERR_FILENO);
+	if (lv >= 6)
+		philos_last_meal_mtx_destroy(philos, n);
+	if (lv >= 5)
+		philos_free(philos, n);
+	if (lv >= 4)
+		pthread_mutex_destroy(&shared->has_died_mtx);
 	if (lv >= 3)
-		philos_destroy(philos, n);
+		pthread_mutex_destroy(&shared->output_mtx);
 	if (lv >= 2)
-		forks_destroy(shared->forks, n);
+		shared_forks_destroy(shared->forks, n);
 	if (lv >= 1)
-		shared_destroy(shared);
+		shared_free(shared);
 	return (0);
 }
 
@@ -114,9 +120,9 @@ int	main(int argc, const char *argv[5])
 	if (!philos)
 		return (error_handle("Error: philos_init()", 0, shared, philos));
 	if (philos_start(args, philos))
-		return (error_handle("Error: philos_start()", 3, shared, philos));
+		return (error_handle("Error: philos_start()", 6, shared, philos));
 	monitor(philos);
 	if (philos_join(args, philos))
-		return (error_handle("Error: philos_join()", 3, shared, philos));
+		return (error_handle("Error: philos_join()", 6, shared, philos));
 	return (destroy);
 }

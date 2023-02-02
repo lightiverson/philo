@@ -6,13 +6,13 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/31 14:35:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/31 15:50:42 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 12:15:46 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-int	last_meal_mtx_init(t_philo *philos, int n_of_philos)
+int	philos_last_meal_mtx_init(t_philo *philos, int n_of_philos)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	last_meal_mtx_init(t_philo *philos, int n_of_philos)
 		if (pthread_mutex_init(&(philos[i].last_meal_mtx), 0))
 		{
 			ft_putendl_fd("Error: mutex_init()", STDERR_FILENO);
-			if (last_meal_mtx_destroy(philos, i))
+			if (philos_last_meal_mtx_destroy(philos, i))
 				return (2);
 			return (1);
 		}
@@ -31,7 +31,7 @@ int	last_meal_mtx_init(t_philo *philos, int n_of_philos)
 	return (0);
 }
 
-int	last_meal_mtx_destroy(t_philo *philos, int n_of_mtxs)
+int	philos_last_meal_mtx_destroy(t_philo *philos, int n_of_mtxs)
 {
 	int	i;
 

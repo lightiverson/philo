@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/27 11:07:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 11:21:22 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/02 15:07:46 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ t_shared	*shared_init(t_args args)
 	shared->forks = ft_calloc(args.n_of_philos, sizeof(*shared->forks));
 	if (!shared->forks)
 	{
-		ft_putendl_fd("Error: calloc()", STDERR_FILENO);
+		ft_putendl_fd("Error: ft_calloc()", STDERR_FILENO);
 		free(shared);
 		return (0);
 	}
 	shared->has_died = false;
-	if (forks_init(shared->forks, args.n_of_philos))
+	if (shared_forks_init(shared->forks, args.n_of_philos))
 	{
-		ft_putendl_fd("Error: forks_init()", STDERR_FILENO);
+		ft_putendl_fd("Error: shared_forks_init()", STDERR_FILENO);
 		free(shared->forks);
 		free(shared);
 		return (0);
@@ -40,13 +40,7 @@ t_shared	*shared_init(t_args args)
 	return (shared);
 }
 
-void	shared_destroy(t_shared *shared)
-{
-	free(shared->forks);
-	free(shared);
-}
-
-int	forks_init(pthread_mutex_t *forks, int n_of_philos)
+int	shared_forks_init(pthread_mutex_t *forks, int n_of_philos)
 {
 	int	i;
 
@@ -56,7 +50,7 @@ int	forks_init(pthread_mutex_t *forks, int n_of_philos)
 		if (pthread_mutex_init(&forks[i], 0))
 		{
 			ft_putendl_fd("Error: mutex_init()", STDERR_FILENO);
-			if (forks_destroy(forks, i))
+			if (shared_forks_destroy(forks, i))
 				return (2);
 			return (1);
 		}
@@ -65,7 +59,7 @@ int	forks_init(pthread_mutex_t *forks, int n_of_philos)
 	return (0);
 }
 
-int	forks_destroy(pthread_mutex_t *forks, int n_init_forks)
+int	shared_forks_destroy(pthread_mutex_t *forks, int n_init_forks)
 {
 	int	i;
 
@@ -79,5 +73,11 @@ int	forks_destroy(pthread_mutex_t *forks, int n_init_forks)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	shared_free(t_shared *shared)
+{
+	free(shared);
 	return (0);
 }
