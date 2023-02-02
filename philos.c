@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/31 15:51:28 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/01/31 17:25:02 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ int	philos_start(t_args args, t_philo *philos)
 				philo_routine, (void *)&philos[i]))
 		{
 			ft_putendl_fd("Error: pthread_create(thread)", STDERR_FILENO);
-			return (0);
+			return (1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	philos_join(t_args args, t_philo *philos)
