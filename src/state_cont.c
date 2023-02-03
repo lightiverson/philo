@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/12 15:13:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 14:29:49 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 15:38:22 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	take_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0) {
+	if (!philo->id % 2)
+	{
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->right_fork);
 		return ;
@@ -25,7 +26,8 @@ void	take_forks(t_philo *philo)
 
 void	put_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0) {
+	if (!philo->id % 2)
+	{
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
 		return ;

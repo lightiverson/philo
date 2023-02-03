@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:52:02 by kawish        #+#    #+#                 */
-/*   Updated: 2023/02/02 12:19:24 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 16:26:02 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /* Private libraries */
 # include "structs.h"
-# include "libft/libft.h"
+# include "ft_mini.h"
 # include "philos.h"
 
 /* Public libraries */

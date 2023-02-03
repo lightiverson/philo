@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 19:31:35 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 16:32:02 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 # include "structs.h"
 # include "state.h"
 # include "timestamp.h"
-# include "libft/libft.h"
+# include "ft_mini.h"
 # include "validate.h"
 # include "utils.h"
 # include "shared.h"
+# include "setter_getter.h"
 
 /* Public libraries */
 # include <stdlib.h>

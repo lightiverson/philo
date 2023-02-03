@@ -6,12 +6,11 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 14:25:25 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 16:36:08 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
-#include "setter_getter.h"
 
 t_args	args_parse(int argc, const char *argv[5])
 {
@@ -128,3 +127,5 @@ int	main(int argc, const char *argv[5])
 		return ((int)error_handle("Error: philos_join()", 6, shared, philos));
 	return (destroy(philos, args, shared));
 }
+
+// voeg nieuwe .c aan makefile toe

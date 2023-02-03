@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/27 15:06:39 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 18:54:36 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 16:25:48 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 /* Private libraries */
 # include "structs.h"
-# include "libft/libft.h"
+# include "ft_mini.h"
 
 /* shared.c */
 t_shared	*shared_init(t_args args);

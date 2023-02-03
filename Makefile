@@ -1,6 +1,12 @@
+VPATH =		src: \
+			includes
 NAME =		philo
 MAIN =		obj/main.o
-OBJECTS =	obj/philos_last_meal.o \
+OBJECTS =	obj/ft_calloc.o \
+			obj/ft_itoa.o \
+			obj/ft_mini.o \
+			obj/ft_strdup.o \
+			obj/philos_last_meal.o \
 			obj/philos.o \
 			obj/setter_getter.o \
 			obj/shared.o \
@@ -9,7 +15,8 @@ OBJECTS =	obj/philos_last_meal.o \
 			obj/timestamp.o \
 			obj/utils.o \
 			obj/validate.o
-HEADERS =	philos.h \
+HEADERS =	ft_mini.h \
+			philos.h \
 			setter_getter.h \
 			shared.h \
 			state.h \
@@ -20,24 +27,19 @@ HEADERS =	philos.h \
 CFLAGS ?=	-Wall -Wextra -Werror
 LDFLAGS ?=
 
-all :		libft $(NAME)
-
-libft:
-	make -C libft
+all :	$(NAME)
 
 $(NAME) : $(MAIN) $(OBJECTS)
-	$(CC) -o $(NAME) $(MAIN) $(OBJECTS) libft/libft.a $(LDFLAGS)
+	$(CC) -o $(NAME) $(MAIN) $(OBJECTS) $(LDFLAGS)
 
 obj/%.o : %.c $(HEADERS)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) -I ./includes $(CFLAGS) -c -o $@ $<
 
 clean :
-	make clean -C libft
 	rm -rf obj
 
 fclean : clean
-	make fclean -C libft
 	rm -f $(NAME)
 
 re : fclean all
@@ -66,4 +68,4 @@ docker-pwd-leak:
 	-e LDFLAGS="-fsanitize=leak -g" \
 	ubuntu-philo sh -c "cd /pwd; bash"
 
-.PHONY : all clean fclean re libft
+.PHONY : all clean fclean re
