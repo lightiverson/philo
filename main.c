@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 19:29:07 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/03 14:25:25 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,6 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (!(philo->id % 2))
-	{
-		better_sleep(philo->args.time_to_eat);
-	}
 	while (1)
 	{
 		if (get_has_died(philo->shared))
@@ -116,6 +112,7 @@ int	main(int argc, const char *argv[5])
 		return ((int)error_handle("Error: arg count", 0, shared, philos));
 	are_cla_valid(++argv);
 	args = args_parse(argc, argv);
+	print_args_struct(args);
 	if (!are_philo_mem_pos(args))
 		return ((int)error_handle("Error: non pos args", 0, shared, philos));
 	shared = shared_init(args);
