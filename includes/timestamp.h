@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:56:18 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 11:57:13 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 10:33:51 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 long	timeval_to_ms(struct timeval tv);
 long	get_current_timestamp_in_ms(void);
-// void	better_sleep(int miliseconds);
-void	better_sleep(long time);
+void	better_sleep(int miliseconds);
+// void	better_sleep(long time);
 
 #endif

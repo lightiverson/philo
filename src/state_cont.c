@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/12 15:13:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 15:38:22 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 10:32:26 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	put_forks(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	
 }
 
 pthread_mutex_t	*left(t_philo *philo, int i)

@@ -6,12 +6,12 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/03 15:57:46 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 16:30:31 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 10:31:34 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MINI
-# define FT_MINI
+#ifndef FT_MINI_H
+# define FT_MINI_H
 
 /* Public libraries */
 # include <stddef.h>
@@ -34,6 +34,6 @@ char	*ft_itoa(int n);
 char	*ft_strdup(const char *s1);
 
 /* ft_atoi.c */
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 
 #endif

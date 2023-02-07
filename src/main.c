@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 10:29:52 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 10:36:07 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,3 +127,5 @@ int	main(int argc, const char *argv[5])
 		return ((int)error_handle("Error: philos_join()", 6, shared, philos));
 	return (destroy(philos, args, shared));
 }
+
+// voeg check toe aan sleep functie

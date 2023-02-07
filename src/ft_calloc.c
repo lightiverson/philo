@@ -6,11 +6,11 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/03 16:13:04 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 16:16:24 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 10:32:02 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "ft_mini.h"
+#include "ft_mini.h"
 
 static void	*ft_memset(void *b, int c, size_t len)
 {
