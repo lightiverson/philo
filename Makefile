@@ -2,7 +2,8 @@ VPATH =		src: \
 			includes
 NAME =		philo
 MAIN =		obj/main.o
-OBJECTS =	obj/ft_calloc.o \
+OBJECTS =	obj/ft_atoi.o \
+			obj/ft_calloc.o \
 			obj/ft_itoa.o \
 			obj/ft_mini.o \
 			obj/ft_strdup.o \
