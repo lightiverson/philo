@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:18:07 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 16:26:08 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 12:08:34 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@
 # include "structs.h"
 
 bool	are_cla_valid(const char *argv[5]);
-bool	are_philo_mem_pos(t_args args);
+bool	are_args_mem_valid(t_args args);
 
 #endif

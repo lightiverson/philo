@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:17:49 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/01/10 16:09:20 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 12:09:07 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,23 @@ bool	are_cla_valid(const char *cla[5])
 	return (true);
 }
 
-static bool	is_pos(int philo_mem)
+bool	are_args_mem_valid(t_args args)
 {
-	if (philo_mem < 1)
+	if (args.n_of_philos < 1 || args.n_of_philos > 200)
+	{
+		ft_putendl_fd("Error: invalid n of philo(s)", STDERR_FILENO);
 		return (false);
+	}
+	if (args.time_to_die < 60 || args.time_to_eat < 60
+		|| args.time_to_sleep < 60)
+	{
+		ft_putendl_fd("Error: time_to_x to low", STDERR_FILENO);
+		return (false);
+	}
+	if (args.number_of_times_to_eat < 1)
+	{
+		ft_putendl_fd("Error: times_to_eat to low", STDERR_FILENO);
+		return (false);
+	}
 	return (true);
-}
-
-bool	are_philo_mem_pos(t_args args)
-{
-	return (
-		is_pos(args.n_of_philos)
-		&& is_pos(args.time_to_die)
-		&& is_pos(args.time_to_eat)
-		&& is_pos(args.time_to_sleep)
-		&& is_pos(args.number_of_times_to_eat)
-	);
 }

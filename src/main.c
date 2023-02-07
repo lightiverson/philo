@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 10:36:07 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 14:24:03 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->args.n_of_philos == 1)
+	{
+		while (get_has_died(philo->shared))
+			break ;
+		return (0);
+	}
 	while (1)
 	{
 		if (get_has_died(philo->shared))
@@ -109,11 +115,12 @@ int	main(int argc, const char *argv[5])
 	shared = 0;
 	if (argc < 5 || argc > 6)
 		return ((int)error_handle("Error: arg count", 0, shared, philos));
-	are_cla_valid(++argv);
+	if (!are_cla_valid(++argv))
+		return ((int)error_handle("Error: invalid cla(s)", 0, shared, philos));
 	args = args_parse(argc, argv);
+	if (!are_args_mem_valid(args))
+		return ((int)error_handle("Error: invalid args", 0, shared, philos));
 	print_args_struct(args);
-	if (!are_philo_mem_pos(args))
-		return ((int)error_handle("Error: non pos args", 0, shared, philos));
 	shared = shared_init(args);
 	if (!shared)
 		return ((int)error_handle("Error: shared_init()", 0, shared, philos));
@@ -127,5 +134,3 @@ int	main(int argc, const char *argv[5])
 		return ((int)error_handle("Error: philos_join()", 6, shared, philos));
 	return (destroy(philos, args, shared));
 }
-
-// voeg check toe aan sleep functie
