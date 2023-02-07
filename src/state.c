@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 15:29:35 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 11:45:52 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,13 @@ void	eat(t_philo *philo)
 	better_sleep(philo->args.time_to_eat);
 }
 
-/*
-Voeg check toe of philo dood zal gaan
-in z'n slaap. Zo ja slaap tot dan en set_has_died()
-Betekend dit niet dat deze check in de monitor moet?
-De monitor is de enige die set_has_died() kan callen
-*/
 void	_sleep(t_philo *philo)
 {
 	print_state(philo, "is sleeping");
-	better_sleep(philo->args.time_to_sleep);
+	if (philo->args.time_to_eat < philo->args.time_to_sleep)
+		better_sleep(philo->args.time_to_eat);
+	else
+		better_sleep(philo->args.time_to_sleep);
 }
 
 void	think(t_philo *philo)
