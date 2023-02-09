@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 16:15:06 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/09 11:20:45 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	i = 0;
 	while (i < args.n_of_philos)
 	{
+		philos[i].meals_left = args.number_of_times_to_eat;
 		philos[i].id = i + 1;
 		philos[i].args = args;
 		philos[i].last_meal = 0;
@@ -31,8 +32,8 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		philos[i].right_fork = right(&philos[i], i);
 		i++;
 	}
-	if (philos_last_meal_mtx_init(philos, args.n_of_philos))
-		return (error_handle("Error: philos_last_meal_mtx_init()",
+	if (philos_mtx_init(philos, args.n_of_philos))
+		return (error_handle("Error: philos_mtx_init()",
 				5, shared, philos));
 	return (philos);
 }

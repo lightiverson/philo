@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:54 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/03 16:32:02 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/09 11:21:03 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # include <pthread.h>
 
 /* last_meal.c */
-int		philos_last_meal_mtx_init(t_philo *philos, int n_of_philos);
-int		philos_last_meal_mtx_destroy(t_philo *philos, int n_of_mtxs);
+int		philos_mtx_init(t_philo *philos, int n_of_philos);
+int		philos_mtx_destroy(t_philo *philos, int n_of_mtxs);
 
 /* philos.c */
 t_philo	*philos_init(t_args args, t_shared *shared);

@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 14:24:03 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/09 14:31:40 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_args	args_parse(int argc, const char *argv[5])
 	args.time_to_die = ft_atoi(argv[1]);
 	args.time_to_eat = ft_atoi(argv[2]);
 	args.time_to_sleep = ft_atoi(argv[3]);
-	args.number_of_times_to_eat = 1;
+	args.number_of_times_to_eat = -1;
 	if (argc == 6)
 		args.number_of_times_to_eat = ft_atoi(argv[4]);
 	return (args);
@@ -88,7 +88,7 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 		return (0);
 	n = philos->args.n_of_philos;
 	if (lv >= 6)
-		philos_last_meal_mtx_destroy(philos, n);
+		philos_mtx_destroy(philos, n);
 	if (lv >= 5)
 		free(philos);
 	if (lv >= 4)

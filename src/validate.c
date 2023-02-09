@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:17:49 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 12:09:07 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/07 17:22:42 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool	str_is_numeric(const char *str)
 
 	i = 0;
 	if (str[0] == '-')
-		i++;
+		return (false);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
@@ -50,7 +50,7 @@ static bool	is_valid_cla(const char *cla)
 	}
 	if (!str_is_numeric(cla))
 	{
-		printf("Error: <%s> is not numerical OR cla underflows/overflows\n",
+		printf("Error: <%s> is not numerical OR underflows/overflows OR is negative\n",
 			cla);
 		return (false);
 	}
@@ -81,7 +81,7 @@ bool	are_args_mem_valid(t_args args)
 		ft_putendl_fd("Error: time_to_x to low", STDERR_FILENO);
 		return (false);
 	}
-	if (args.number_of_times_to_eat < 1)
+	if (!args.number_of_times_to_eat)
 	{
 		ft_putendl_fd("Error: times_to_eat to low", STDERR_FILENO);
 		return (false);
