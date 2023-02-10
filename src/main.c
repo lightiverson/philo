@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 15:02:22 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 15:54:48 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void	monitor(t_philo *philos)
 	int		i;
 	int		n;
 	int		philos_done_eating;
+	t_args	args;
 
+	args = philos->args;
 	i = 0;
 	n = philos->args.n_of_philos;
 	philos_done_eating = 0;
@@ -39,15 +41,17 @@ void	monitor(t_philo *philos)
 	{
 		while (i < n)
 		{
-			if ((philos->args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) == philos->args.number_of_times_to_eat))
+			pthread_mutex_lock(&philos[i].meals_left_mtx);
+			if ((args.number_of_times_to_eat != -1) && (philos[i].meals_left == args.number_of_times_to_eat))
 			{
 				philos_done_eating++;
-				set_meals_left(&philos[i]);
+				philos[i].meals_left++;
 			}
-			if (get_current_timestamp_in_ms() - get_last_meal(&philos[i]) > philos[i].args.time_to_die || philos_done_eating == n)
+			pthread_mutex_unlock(&philos[i].meals_left_mtx);
+			if (get_current_timestamp_in_ms() - get_last_meal(&philos[i]) > args.time_to_die || philos_done_eating == n)
 			{
 				set_has_died(philos->shared);
-				if ((philos->args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) > philos->args.number_of_times_to_eat))
+				if ((args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) > args.number_of_times_to_eat))
 					return ;
 				has_died(&philos[i]);
 				return ;
@@ -69,19 +73,13 @@ void	*philo_routine(void *arg)
 			break ;
 		return (0);
 	}
-	while (1)
+	while (!get_has_died(philo->shared))
 	{
-		if (get_has_died(philo->shared))
-			break ;
 		take_forks(philo);
 		eat(philo);
 		put_forks(philo);
 		set_meals_left(philo);
-		if (get_has_died(philo->shared))
-			break ;
 		_sleep(philo);
-		if (get_has_died(philo->shared))
-			break ;
 		think(philo);
 	}
 	return (0);
