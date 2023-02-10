@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 12:19:12 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 15:02:22 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,10 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 	if (!philos)
 		return (0);
 	n = philos->args.n_of_philos;
+	if (lv >= 7)
+		philos_meals_left_mtx_destroy(philos, n);
 	if (lv >= 6)
-		philos_mtx_destroy(philos, n);
+		philos_last_meal_mtx_destroy(philos, n);
 	if (lv >= 5)
 		free(philos);
 	if (lv >= 4)
@@ -136,9 +138,9 @@ int	main(int argc, const char *argv[5])
 	if (!philos)
 		return ((int)error_handle("Error: philos_init()", 0, shared, philos));
 	if (philos_start(args, philos))
-		return ((int)error_handle("Error: philos_start()", 6, shared, philos));
+		return ((int)error_handle("Error: philos_start()", 7, shared, philos));
 	monitor(philos);
 	if (philos_join(args, philos))
-		return ((int)error_handle("Error: philos_join()", 6, shared, philos));
+		return ((int)error_handle("Error: philos_join()", 7, shared, philos));
 	return (destroy(philos, args, shared));
 }

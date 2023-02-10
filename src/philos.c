@@ -6,13 +6,12 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 12:23:23 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 15:00:36 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-// Deze is niet goed
 t_philo	*philos_init(t_args args, t_shared *shared)
 {
 	t_philo	*philos;
@@ -33,9 +32,10 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		philos[i].right_fork = right(&philos[i], i);
 		i++;
 	}
-	if (philos_mtx_init(philos, args.n_of_philos))
-		return (error_handle("Error: philos_mtx_init()",
-				5, shared, philos));
+	if (philos_last_meal_mtx_init(philos, args.n_of_philos))
+		return (error_handle("Error: philos_mtx_init()", 5, shared, philos));
+	if (philos_meals_left_mtx_init(philos, args.n_of_philos))
+		return (error_handle("Error: philos_mtx_init()", 6, shared, philos));
 	return (philos);
 }
 
