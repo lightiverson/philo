@@ -6,12 +6,13 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/31 14:35:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/09 11:21:03 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 12:23:13 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
+// Deze is niet goed
 int	philos_mtx_init(t_philo *philos, int n_of_philos)
 {
 	int	i;
@@ -38,6 +39,7 @@ int	philos_mtx_init(t_philo *philos, int n_of_philos)
 	return (0);
 }
 
+// Deze is niet goed
 int	philos_mtx_destroy(t_philo *philos, int n_of_mtxs)
 {
 	int	i;

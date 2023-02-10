@@ -6,12 +6,13 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/09 11:20:45 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 12:23:23 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
+// Deze is niet goed
 t_philo	*philos_init(t_args args, t_shared *shared)
 {
 	t_philo	*philos;
@@ -23,7 +24,7 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 	i = 0;
 	while (i < args.n_of_philos)
 	{
-		philos[i].meals_left = args.number_of_times_to_eat;
+		philos[i].meals_left = 0;
 		philos[i].id = i + 1;
 		philos[i].args = args;
 		philos[i].last_meal = 0;

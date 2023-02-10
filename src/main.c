@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 10:41:45 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 12:19:12 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,16 @@ void	monitor(t_philo *philos)
 	{
 		while (i < n)
 		{
-			// if (get_current_timestamp_in_ms() - get_last_meal_timestamp(&philos[i]) > philos[i].args.time_to_die)
-			if (get_meals_left(&philos[i]) == 0)
+			if ((philos->args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) == philos->args.number_of_times_to_eat))
 			{
 				philos_done_eating++;
 				set_meals_left(&philos[i]);
 			}
-			if (philos_done_eating == n)
+			if (get_current_timestamp_in_ms() - get_last_meal(&philos[i]) > philos[i].args.time_to_die || philos_done_eating == n)
 			{
 				set_has_died(philos->shared);
+				if ((philos->args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) > philos->args.number_of_times_to_eat))
+					return ;
 				has_died(&philos[i]);
 				return ;
 			}
