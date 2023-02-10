@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/09 14:31:40 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/10 10:41:45 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,22 @@ void	monitor(t_philo *philos)
 {
 	int		i;
 	int		n;
+	int		philos_done_eating;
 
 	i = 0;
 	n = philos->args.n_of_philos;
+	philos_done_eating = 0;
 	while (1)
 	{
 		while (i < n)
 		{
-			if (get_current_timestamp_in_ms()
-				- get_last_meal_timestamp(&philos[i])
-				> philos[i].args.time_to_die)
+			// if (get_current_timestamp_in_ms() - get_last_meal_timestamp(&philos[i]) > philos[i].args.time_to_die)
+			if (get_meals_left(&philos[i]) == 0)
+			{
+				philos_done_eating++;
+				set_meals_left(&philos[i]);
+			}
+			if (philos_done_eating == n)
 			{
 				set_has_died(philos->shared);
 				has_died(&philos[i]);
@@ -69,6 +75,7 @@ void	*philo_routine(void *arg)
 		take_forks(philo);
 		eat(philo);
 		put_forks(philo);
+		set_meals_left(philo);
 		if (get_has_died(philo->shared))
 			break ;
 		_sleep(philo);
@@ -120,7 +127,7 @@ int	main(int argc, const char *argv[5])
 	args = args_parse(argc, argv);
 	if (!are_args_mem_valid(args))
 		return ((int)error_handle("Error: invalid args", 0, shared, philos));
-	print_args_struct(args);
+	// print_args_struct(args);
 	shared = shared_init(args);
 	if (!shared)
 		return ((int)error_handle("Error: shared_init()", 0, shared, philos));
