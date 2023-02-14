@@ -6,59 +6,23 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/14 14:57:04 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 16:34:13 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-t_args	args_parse(int argc, const char *argv[5])
-{
-	t_args	args;
-
-	args.n_philos = ft_atoi(argv[0]);
-	args.time_to_die = ft_atoi(argv[1]);
-	args.time_to_eat = ft_atoi(argv[2]);
-	args.time_to_sleep = ft_atoi(argv[3]);
-	args.n_times_to_eat = -1;
-	if (argc == 6)
-		args.n_times_to_eat = ft_atoi(argv[4]);
-	return (args);
-}
-
-typedef struct s_data
-{
-	int i;
-	int done_eating;
-	int n_philos;
-	int n_times_to_eat;
-	int time_to_die;
-	t_philo *philo;
-}	t_data;
-
-t_data	alpha(t_philo *philos)
-{
-	t_data	d;
-
-	d.i = 0;
-	d.done_eating = 0;
-	d.n_philos = philos->args.n_philos;
-	d.n_times_to_eat = philos->args.n_times_to_eat;
-	d.time_to_die = philos->args.time_to_die;
-	return (d);
-}
-
-void	beta(int *done_eating, t_philo *philo)
+static void	monitor_inner(int *done_eating, t_philo *philo)
 {
 	*done_eating = *done_eating + 1;
 	set_meals_left(philo);
 }
 
-void	monitor(t_philo *philos)
+static void	monitor(t_philo *philos)
 {
-	t_data	d;
+	t_monitor_d	d;
 
-	d = alpha(philos);
+	d = d_init(philos);
 	while (1)
 	{
 		while (d.i < d.n_philos)
@@ -66,7 +30,7 @@ void	monitor(t_philo *philos)
 			d.philo = &philos[d.i];
 			if ((d.n_times_to_eat != -1) && (get_meals_left(d.philo)
 					== d.n_times_to_eat))
-				beta(&d.done_eating, d.philo);
+				monitor_inner(&d.done_eating, d.philo);
 			if (get_current_timestamp_in_ms() - get_last_meal(d.philo)
 				> d.time_to_die || d.done_eating == d.n_philos)
 			{

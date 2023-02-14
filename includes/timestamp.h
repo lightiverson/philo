@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:56:18 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 16:21:53 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 16:36:41 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-long	timeval_to_ms(struct timeval tv);
 long	get_current_timestamp_in_ms(void);
 void	better_sleep(int miliseconds);
 

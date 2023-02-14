@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/14 14:30:46 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 16:30:44 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,15 @@ typedef struct s_philo
 	pthread_mutex_t	last_meal_mtx;
 	pthread_mutex_t	meals_left_mtx;
 }	t_philo;
+
+typedef struct s_monitor_d
+{
+	int		i;
+	int		done_eating;
+	int		n_philos;
+	int		n_times_to_eat;
+	int		time_to_die;
+	t_philo	*philo;
+}	t_monitor_d;
 
 #endif

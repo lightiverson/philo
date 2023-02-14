@@ -6,7 +6,7 @@
 /*   By: kawish <kawish@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/27 12:51:25 by kawish        #+#    #+#                 */
-/*   Updated: 2023/02/14 14:30:46 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 16:30:08 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,30 @@ int	destroy(t_philo *philos, t_args args, t_shared *shared)
 	free(shared->forks);
 	free(shared);
 	return (0);
+}
+
+t_args	args_parse(int argc, const char *argv[5])
+{
+	t_args	args;
+
+	args.n_philos = ft_atoi(argv[0]);
+	args.time_to_die = ft_atoi(argv[1]);
+	args.time_to_eat = ft_atoi(argv[2]);
+	args.time_to_sleep = ft_atoi(argv[3]);
+	args.n_times_to_eat = -1;
+	if (argc == 6)
+		args.n_times_to_eat = ft_atoi(argv[4]);
+	return (args);
+}
+
+t_monitor_d	d_init(t_philo *philos)
+{
+	t_monitor_d	d;
+
+	d.i = 0;
+	d.done_eating = 0;
+	d.n_philos = philos->args.n_philos;
+	d.n_times_to_eat = philos->args.n_times_to_eat;
+	d.time_to_die = philos->args.time_to_die;
+	return (d);
 }
