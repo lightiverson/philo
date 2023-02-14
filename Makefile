@@ -25,7 +25,7 @@ HEADERS =	ft_mini.h \
 			timestamp.h \
 			utils.h \
 			validate.h
-CFLAGS ?=	-Wall -Wextra -Werror
+CFLAGS ?=	-Wall -Wextra -Werror -O3
 LDFLAGS ?=
 
 all :	$(NAME)

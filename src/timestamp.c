@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:56:39 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 16:21:58 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 11:16:53 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ void	better_sleep(int miliseconds)
 
 	target_time = get_current_timestamp_in_ms() + miliseconds;
 	while (get_current_timestamp_in_ms() < target_time)
-		usleep(100);
+		usleep(300);
 }

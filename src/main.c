@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 15:02:22 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 11:15:58 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,10 @@ void	*philo_routine(void *arg)
 		while (get_has_died(philo->shared))
 			break ;
 		return (0);
+	}
+	if (philo->id % 2 == 0)
+	{
+		better_sleep(philo->args.time_to_eat);
 	}
 	while (1)
 	{
