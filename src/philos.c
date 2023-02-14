@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:48:41 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/14 14:30:29 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 18:05:30 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ t_philo	*philos_init(t_args args, t_shared *shared)
 		i++;
 	}
 	if (philos_last_meal_mtx_init(philos, args.n_philos))
-		return (error_handle("Error: philos_mtx_init()", 5, shared, philos));
+		return (error_handle("Error: philos_last_meal_mtx_init()",
+				5, shared, philos));
 	if (philos_meals_left_mtx_init(philos, args.n_philos))
-		return (error_handle("Error: philos_mtx_init()", 6, shared, philos));
+		return (error_handle("Error: philos_meals_left_mtx_init()",
+				6, shared, philos));
 	return (philos);
 }
 
@@ -53,7 +55,7 @@ int	philos_start(t_args args, t_philo *philos)
 		if (pthread_create(&(philos[i].thread), 0,
 				philo_routine, (void *)&philos[i]))
 		{
-			ft_putendl_fd("Error: pthread_create(thread)", STDERR_FILENO);
+			ft_putendl_fd("Error: pthread_create()", STDERR_FILENO);
 			return (1);
 		}
 		i++;
@@ -70,7 +72,7 @@ int	philos_join(t_args args, t_philo *philos)
 	{
 		if (pthread_join(philos[i].thread, 0))
 		{
-			ft_putendl_fd("Error: joining philos failed", STDERR_FILENO);
+			ft_putendl_fd("Error: pthread_join()", STDERR_FILENO);
 			return (1);
 		}
 		i++;

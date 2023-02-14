@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:17:49 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/14 14:30:46 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 18:15:44 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,8 @@ static bool	is_valid_cla(const char *cla)
 	}
 	if (!str_is_numeric(cla))
 	{
-		printf("Error: <%s> is not numerical OR \
-		underflows/overflows OR is negative\n",
-			cla);
+		printf("Error: <%s> is not numerical OR underflows/overflows OR is \
+negative\n", cla);
 		return (false);
 	}
 	return (true);
