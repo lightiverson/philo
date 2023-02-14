@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/18 11:53:20 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 11:25:41 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 13:48:06 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,4 @@ int	get_meals_left(t_philo *philo)
 	meals_left = philo->meals_left;
 	pthread_mutex_unlock(&philo->meals_left_mtx);
 	return (meals_left);
-}
-
-long	get_last_meal(t_philo *philo)
-{
-	long	last_meal;
-
-	pthread_mutex_lock(&philo->last_meal_mtx);
-	last_meal = philo->last_meal;
-	pthread_mutex_unlock(&philo->last_meal_mtx);
-	return (last_meal);
-}
-
-void	set_last_meal(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->last_meal_mtx);
-	philo->last_meal = get_current_timestamp_in_ms();
-	pthread_mutex_unlock(&philo->last_meal_mtx);
 }

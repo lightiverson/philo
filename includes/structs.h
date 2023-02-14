@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/15 16:57:36 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/09 10:41:50 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 14:30:46 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ typedef struct s_shared
 
 typedef struct s_args
 {
-	int			n_of_philos;
+	int			n_philos;
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
-	int			number_of_times_to_eat;
+	int			n_times_to_eat;
 	long int	start_time;
 }	t_args;
 

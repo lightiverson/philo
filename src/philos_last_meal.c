@@ -6,18 +6,18 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/31 14:35:35 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 15:05:47 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 14:30:29 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-int	philos_last_meal_mtx_init(t_philo *philos, int n_of_philos)
+int	philos_last_meal_mtx_init(t_philo *philos, int n_philos)
 {
 	int	i;
 
 	i = 0;
-	while (i < n_of_philos)
+	while (i < n_philos)
 	{
 		if (pthread_mutex_init(&(philos[i].last_meal_mtx), 0))
 		{
@@ -48,12 +48,12 @@ int	philos_last_meal_mtx_destroy(t_philo *philos, int n_of_mtxs)
 	return (0);
 }
 
-int	philos_meals_left_mtx_init(t_philo *philos, int n_of_philos)
+int	philos_meals_left_mtx_init(t_philo *philos, int n_philos)
 {
 	int	i;
 
 	i = 0;
-	while (i < n_of_philos)
+	while (i < n_philos)
 	{
 		if (pthread_mutex_init(&(philos[i].meals_left_mtx), 0))
 		{

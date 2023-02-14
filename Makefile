@@ -9,6 +9,7 @@ OBJECTS =	obj/ft_atoi.o \
 			obj/ft_strdup.o \
 			obj/philos_last_meal.o \
 			obj/philos.o \
+			obj/setter_getter_cont.o \
 			obj/setter_getter.o \
 			obj/shared.o \
 			obj/state_cont.o \

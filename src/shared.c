@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/27 11:07:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/02 18:54:34 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 14:30:29 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_shared	*shared_init(t_args args)
 		ft_putendl_fd("Error: ft_calloc()", STDERR_FILENO);
 		return (0);
 	}
-	shared->forks = ft_calloc(args.n_of_philos, sizeof(*shared->forks));
+	shared->forks = ft_calloc(args.n_philos, sizeof(*shared->forks));
 	if (!shared->forks)
 	{
 		ft_putendl_fd("Error: ft_calloc()", STDERR_FILENO);
@@ -30,7 +30,7 @@ t_shared	*shared_init(t_args args)
 		return (0);
 	}
 	shared->has_died = false;
-	if (shared_forks_init(shared->forks, args.n_of_philos))
+	if (shared_forks_init(shared->forks, args.n_philos))
 	{
 		ft_putendl_fd("Error: shared_forks_init()", STDERR_FILENO);
 		free(shared->forks);
@@ -40,12 +40,12 @@ t_shared	*shared_init(t_args args)
 	return (shared);
 }
 
-int	shared_forks_init(pthread_mutex_t *forks, int n_of_philos)
+int	shared_forks_init(pthread_mutex_t *forks, int n_philos)
 {
 	int	i;
 
 	i = 0;
-	while (i < n_of_philos)
+	while (i < n_philos)
 	{
 		if (pthread_mutex_init(&forks[i], 0))
 		{
