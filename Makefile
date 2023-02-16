@@ -70,4 +70,16 @@ docker-pwd-leak:
 	-e LDFLAGS="-fsanitize=leak -g" \
 	ubuntu-philo sh -c "cd /pwd; bash"
 
+docker-pwd-val:
+	docker run \
+	-it \
+	--rm \
+	--init \
+	-v "$$PWD:/pwd" \
+	--cap-add=SYS_PTRACE \
+	--security-opt seccomp=unconfined \
+	-e CFLAGS="-Wall -Wextra -O3 -g -gdwarf-4 -gstrict-dwarf" \
+	-e LDFLAGS="-g -gdwarf-4 -gstrict-dwarf" \
+	ubuntu-philo sh -c "cd /pwd; bash"
+
 .PHONY : all clean fclean re
