@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/17 14:28:21 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/17 14:57:58 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,6 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 	return (0);
 }
 
-void check_leaks(void)
-{
-	system("leaks -q philo");
-}
-
 int	main(int argc, const char *argv[5])
 {
 	t_args		args;
@@ -133,6 +128,5 @@ int	main(int argc, const char *argv[5])
 	monitor(philos);
 	if (philos_join(args, philos))
 		return ((int)error_handle("Error: philos_join()", 7, shared, philos));
-	atexit(check_leaks);
 	return (destroy(philos, args, shared));
 }
