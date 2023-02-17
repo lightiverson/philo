@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/21 17:46:06 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 15:32:36 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/17 14:49:16 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ void	print_state(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->shared->output_mtx);
 	if (!get_has_died(philo->shared))
-		printf("%i\t%ld\t%d\t%s\n", get_meals_left(philo), get_current_timestamp_in_ms() - philo->args.start_time, philo->id, str);
+		printf("%ld %d %s\n", get_current_timestamp_in_ms()
+			- philo->args.start_time, philo->id, str);
 	else if (!ft_strncmp(str, "died", 5))
-		printf("%i\t%ld\t%d\t%s\n", get_meals_left(philo), get_current_timestamp_in_ms() - philo->args.start_time, philo->id, str);
+		printf("%ld %d %s\n", get_current_timestamp_in_ms()
+			- philo->args.start_time, philo->id, str);
 	pthread_mutex_unlock(&philo->shared->output_mtx);
 }
 
@@ -32,8 +34,11 @@ void	eat(t_philo *philo)
 void	_sleep(t_philo *philo)
 {
 	print_state(philo, "is sleeping");
-	if (philo->args.time_to_eat < philo->args.time_to_sleep)
-		better_sleep(philo->args.time_to_eat);
+	if (philo->args.time_to_die < philo->args.time_to_sleep)
+	{
+		better_sleep(philo->args.time_to_die);
+		set_has_died(philo->shared);
+	}
 	else
 		better_sleep(philo->args.time_to_sleep);
 }

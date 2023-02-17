@@ -6,7 +6,7 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/16 13:17:49 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/07 17:22:42 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/14 18:15:44 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static bool	is_valid_cla(const char *cla)
 	}
 	if (!str_is_numeric(cla))
 	{
-		printf("Error: <%s> is not numerical OR underflows/overflows OR is negative\n",
-			cla);
+		printf("Error: <%s> is not numerical OR underflows/overflows OR is \
+negative\n", cla);
 		return (false);
 	}
 	return (true);
@@ -70,7 +70,7 @@ bool	are_cla_valid(const char *cla[5])
 
 bool	are_args_mem_valid(t_args args)
 {
-	if (args.n_of_philos < 1 || args.n_of_philos > 200)
+	if (args.n_philos < 1 || args.n_philos > 200)
 	{
 		ft_putendl_fd("Error: invalid n of philo(s)", STDERR_FILENO);
 		return (false);
@@ -81,7 +81,7 @@ bool	are_args_mem_valid(t_args args)
 		ft_putendl_fd("Error: time_to_x to low", STDERR_FILENO);
 		return (false);
 	}
-	if (!args.number_of_times_to_eat)
+	if (!args.n_times_to_eat)
 	{
 		ft_putendl_fd("Error: times_to_eat to low", STDERR_FILENO);
 		return (false);

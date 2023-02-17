@@ -9,6 +9,7 @@ OBJECTS =	obj/ft_atoi.o \
 			obj/ft_strdup.o \
 			obj/philos_last_meal.o \
 			obj/philos.o \
+			obj/setter_getter_cont.o \
 			obj/setter_getter.o \
 			obj/shared.o \
 			obj/state_cont.o \
@@ -25,7 +26,7 @@ HEADERS =	ft_mini.h \
 			timestamp.h \
 			utils.h \
 			validate.h
-CFLAGS ?=	-Wall -Wextra -Werror
+CFLAGS ?=	-Wall -Wextra -Werror -O3
 LDFLAGS ?=
 
 all :	$(NAME)
@@ -53,8 +54,8 @@ docker-pwd-thread:
 	-v "$$PWD:/pwd" \
 	--cap-add=SYS_PTRACE \
 	--security-opt seccomp=unconfined \
-	-e CFLAGS="-Wall -Wextra -fsanitize=thread -g" \
-	-e LDFLAGS="-fsanitize=thread -g" \
+	-e CFLAGS="-Wall -Wextra -fsanitize=thread -g -O1" \
+	-e LDFLAGS="-fsanitize=thread -g -O1" \
 	ubuntu-philo sh -c "cd /pwd; bash"
 
 docker-pwd-leak:
@@ -67,6 +68,18 @@ docker-pwd-leak:
 	--security-opt seccomp=unconfined \
 	-e CFLAGS="-Wall -Wextra -fsanitize=leak -g" \
 	-e LDFLAGS="-fsanitize=leak -g" \
+	ubuntu-philo sh -c "cd /pwd; bash"
+
+docker-pwd-val:
+	docker run \
+	-it \
+	--rm \
+	--init \
+	-v "$$PWD:/pwd" \
+	--cap-add=SYS_PTRACE \
+	--security-opt seccomp=unconfined \
+	-e CFLAGS="-Wall -Wextra -O3 -g -gdwarf-4 -gstrict-dwarf" \
+	-e LDFLAGS="-g -gdwarf-4 -gstrict-dwarf" \
 	ubuntu-philo sh -c "cd /pwd; bash"
 
 .PHONY : all clean fclean re

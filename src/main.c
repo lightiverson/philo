@@ -6,59 +6,44 @@
 /*   By: kgajadie <kgajadie@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/01/24 16:16:45 by kgajadie      #+#    #+#                 */
-/*   Updated: 2023/02/10 15:54:48 by kgajadie      ########   odam.nl         */
+/*   Updated: 2023/02/17 14:28:21 by kgajadie      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
-t_args	args_parse(int argc, const char *argv[5])
+static void	monitor_inner(int *done_eating, t_philo *philo)
 {
-	t_args	args;
-
-	args.n_of_philos = ft_atoi(argv[0]);
-	args.time_to_die = ft_atoi(argv[1]);
-	args.time_to_eat = ft_atoi(argv[2]);
-	args.time_to_sleep = ft_atoi(argv[3]);
-	args.number_of_times_to_eat = -1;
-	if (argc == 6)
-		args.number_of_times_to_eat = ft_atoi(argv[4]);
-	return (args);
+	*done_eating = *done_eating + 1;
+	set_meals_left(philo);
 }
 
-void	monitor(t_philo *philos)
+static void	monitor(t_philo *philos)
 {
-	int		i;
-	int		n;
-	int		philos_done_eating;
-	t_args	args;
+	t_monitor_d	d;
 
-	args = philos->args;
-	i = 0;
-	n = philos->args.n_of_philos;
-	philos_done_eating = 0;
+	d = d_init(philos);
 	while (1)
 	{
-		while (i < n)
+		while (d.i < d.n_philos)
 		{
-			pthread_mutex_lock(&philos[i].meals_left_mtx);
-			if ((args.number_of_times_to_eat != -1) && (philos[i].meals_left == args.number_of_times_to_eat))
-			{
-				philos_done_eating++;
-				philos[i].meals_left++;
-			}
-			pthread_mutex_unlock(&philos[i].meals_left_mtx);
-			if (get_current_timestamp_in_ms() - get_last_meal(&philos[i]) > args.time_to_die || philos_done_eating == n)
+			d.philo = &philos[d.i];
+			if ((d.n_times_to_eat != -1) && (get_meals_left(d.philo)
+					== d.n_times_to_eat))
+				monitor_inner(&d.done_eating, d.philo);
+			if (get_current_timestamp_in_ms() - get_last_meal(d.philo)
+				> d.time_to_die || d.done_eating == d.n_philos)
 			{
 				set_has_died(philos->shared);
-				if ((args.number_of_times_to_eat != -1) && (get_meals_left(&philos[i]) > args.number_of_times_to_eat))
+				if ((d.n_times_to_eat != -1) && (get_meals_left(d.philo)
+						> d.n_times_to_eat))
 					return ;
-				has_died(&philos[i]);
+				has_died(d.philo);
 				return ;
 			}
-			i++;
+			d.i++;
 		}
-		i = 0;
+		d.i = 0;
 	}
 }
 
@@ -67,19 +52,23 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->args.n_of_philos == 1)
-	{
-		while (get_has_died(philo->shared))
-			break ;
+	if (philo->args.n_philos == 1)
 		return (0);
-	}
-	while (!get_has_died(philo->shared))
+	if (philo->id % 2 == 0)
+		better_sleep(philo->args.time_to_eat);
+	while (1)
 	{
+		if (get_has_died(philo->shared))
+			break ;
 		take_forks(philo);
 		eat(philo);
 		put_forks(philo);
 		set_meals_left(philo);
+		if (get_has_died(philo->shared))
+			break ;
 		_sleep(philo);
+		if (get_has_died(philo->shared))
+			break ;
 		think(philo);
 	}
 	return (0);
@@ -92,7 +81,7 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 	ft_putendl_fd(err_msg, STDERR_FILENO);
 	if (!philos)
 		return (0);
-	n = philos->args.n_of_philos;
+	n = philos->args.n_philos;
 	if (lv >= 7)
 		philos_meals_left_mtx_destroy(philos, n);
 	if (lv >= 6)
@@ -113,6 +102,11 @@ void	*error_handle(char *err_msg, int lv, t_shared *shared, t_philo *philos)
 	return (0);
 }
 
+void check_leaks(void)
+{
+	system("leaks -q philo");
+}
+
 int	main(int argc, const char *argv[5])
 {
 	t_args		args;
@@ -128,7 +122,6 @@ int	main(int argc, const char *argv[5])
 	args = args_parse(argc, argv);
 	if (!are_args_mem_valid(args))
 		return ((int)error_handle("Error: invalid args", 0, shared, philos));
-	// print_args_struct(args);
 	shared = shared_init(args);
 	if (!shared)
 		return ((int)error_handle("Error: shared_init()", 0, shared, philos));
@@ -140,5 +133,6 @@ int	main(int argc, const char *argv[5])
 	monitor(philos);
 	if (philos_join(args, philos))
 		return ((int)error_handle("Error: philos_join()", 7, shared, philos));
+	atexit(check_leaks);
 	return (destroy(philos, args, shared));
 }
