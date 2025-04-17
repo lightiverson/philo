@@ -1,5 +1,10 @@
 # Philo
 
+In this project, you will learn the basics of threading a process.
+You will see how to create threads and you will discover mutexes.
+
+## Notes
+
 Bouw image genaamd ubuntu-philo op basis van Dockerfile:
 ```bash
 docker build -t ubuntu-philo .
